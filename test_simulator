@@ -1,0 +1,21 @@
+import unittest
+from <class> import <file>
+
+class Simulator_tests(unittest.TestCase):
+    
+   
+    def setUp(self) -> None:
+        self.simulator0 = Simulator(0)
+        self.simulator3 = Simulator(3)
+        self.simulator8 = Simulator(8)
+        self.simulator_string = Simulator("Hey, how you doing?)
+
+
+    def test_instance(self):
+        self.assertIsInstance(self.simulator0, Simulator, "This object is not an instance of a Simulator")
+
+    def test_input_null(self):
+        self.assertEqual(self.simulator_string.input, False, "The class accepts non-integers as inputs")
+
+    def test_number_of_open_centers(self):
+        self.assertEqual(self.simulator3.open_centers, 1, "The number of open centers is not correct")
