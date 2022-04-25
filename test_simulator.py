@@ -8,7 +8,7 @@ class Simulator_tests(unittest.TestCase):
         self.simulator0 = Simulator(0)
         self.simulator3 = Simulator(3)
         self.simulator8 = Simulator(8)
-        self.simulator_string = Simulator("Hey, how you doing?)
+        self.simulator_string = Simulator("Hey, how you doing?")
 
 
     def test_instance(self):
