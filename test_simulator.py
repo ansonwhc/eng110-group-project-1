@@ -1,5 +1,5 @@
 import unittest
-from <class> import <file>
+from simulator import Simulator
 
 class Simulator_tests(unittest.TestCase):
     
