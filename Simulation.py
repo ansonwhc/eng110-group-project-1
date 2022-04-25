@@ -3,7 +3,7 @@
 # input (sim_duration: int)
 #   sim_duration: in months
 
-class SGCentresSimulation:
+class Simulator:
     def __init__(self,
                  duration : int,
                  **kwargs):
@@ -12,11 +12,14 @@ class SGCentresSimulation:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        self.simulation()
+        self.result = self.simulate()
         # TODO: add internal variables
 
-    def simulation(self):
-        print(f"Running Simulation, duration {self.duration}")
+    def simulate(self):
+        # print(f"Running Simulation, duration {self.duration}")
+
+        result = "some result"
+        return result
 
     def random_num_trainee_generator(self) -> int:
         # generate a random int [50-100]
