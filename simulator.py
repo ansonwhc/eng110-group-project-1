@@ -1,2 +1,3 @@
 class Simulator():
-    pass
+    def __init__(self):
+        pass
