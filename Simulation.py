@@ -9,17 +9,22 @@ class Simulator:
                  **kwargs):
         # for now, we only have duration as input (monthly expected)
         self.duration = duration
+
+        # this is for when we need to pass more different variables to methods
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        self.result = self.simulate()
         # TODO: add internal variables
 
-    def simulate(self):
-        # print(f"Running Simulation, duration {self.duration}")
+        # This is purely for easy TK interface access for now
+        self.result, self.sim_info = self.simulate()
 
-        result = "some result"
-        return result
+    def simulate(self):
+        result = 'Nothing for now'
+        sim_info = f"Input: {self.duration}"
+        # print(sim_info)
+
+        return result, sim_info
 
     def random_num_trainee_generator(self) -> int:
         # generate a random int [50-100]

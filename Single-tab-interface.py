@@ -1,23 +1,15 @@
 from tkinter import *
-
-
-class Simulator:
-    """Pretending to be the actual simulation script"""
-    def __init__(self, duration):
-        self.duration = duration
-        self.result = None
-        self.result, self.sim_info = self.simulate()
-
-    def simulate(self):
-        result = 'Nothing for now'
-        sim_info = f"Input: {self.duration}"
-
-        return result, sim_info
+from Simulation import Simulator
 
 
 class SimulationInterface:
-    def __init__(self):
+    def __init__(self, window_size: str = "600x400"):
+        """
+        :param window_size: intxint, default: 600x400
+        :return: TK_interface window
+        """
         # TODO: No implementation on prompting user for errors, e.g. input != numeric
+        self.window_size = window_size
         self.create_window()
 
     def run_sim(self):
@@ -41,6 +33,8 @@ class SimulationInterface:
         # pass the input onto the class
         simulator = Simulator(duration)
         sim_result, sim_info = simulator.result, simulator.sim_info
+
+        # set variables for TK_instance's Label objects
         self.result_var.set(sim_result)
         self.info_var.set(sim_info)
 
@@ -66,16 +60,12 @@ class SimulationInterface:
         self.root = Tk()
 
         # format the initial windows size
-        self.root.geometry("600x400")
+        self.root.geometry(self.window_size)
 
         # set variables
         self.duration_var = StringVar()
         self.result_var = StringVar()
         self.info_var = StringVar()
-        #
-        # # create our frame
-        # frame = Frame(root, width=300, height=300)
-        # frame.grid(row=0, column=0, sticky="NW")
 
         # input_label
         Label(self.root, text="Enter Here:")\
