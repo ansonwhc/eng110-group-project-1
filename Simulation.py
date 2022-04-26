@@ -1,11 +1,6 @@
-# Programme pseudocode
-
-# input (sim_duration: int)
-#   sim_duration: in months
-
 class Simulator:
     def __init__(self,
-                 duration : int,
+                 duration: int,
                  **kwargs):
         # for now, we only have duration as input (monthly expected)
         self.duration = duration
@@ -46,5 +41,10 @@ class Simulator:
 
     def random_num_trainee_generator(self) -> int:
         # generate a random int [50-100]
-        # TODO: accept randint range as an input
+        # TODO: set lower_bound, and upper_bound for randint
+        pass
+
+    def random_num_trainee_acceptance(self) -> int:
+        # generate a random int [0-50]
+        # TODO: set lower_bound, and upper_bound for randint
         pass
