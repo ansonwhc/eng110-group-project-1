@@ -4,7 +4,7 @@ class Simulator():
         pass
 
 import random 
-random.seed(53)
+random.seed(101)
 
 
 # number of trainees generated
@@ -18,5 +18,3 @@ print(random.randrange(50, 101))
 print(random.randrange(0, 51))
 
 
-num = random.seedint(1,2)
-print(num)

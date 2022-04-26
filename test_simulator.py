@@ -31,6 +31,8 @@ class Simulator_tests(unittest.TestCase):
         self.simulator_negative = Simulator(-34)
         self.simulation_interface = SimulationInterface()
         self.simulation_interface.create_window()
+        random.seed(102)
+        self.simulator101 = Simulator(101)
 
     # test whether or not the simulator is an instance of the class
     def test_instance(self):
@@ -121,5 +123,14 @@ class Simulator_tests(unittest.TestCase):
         self.assertEqual(self.simulator3.get_num_working_trainees(), sum(self.simulator3.open_centers), "The number of trainees currently training is wrong.")
         self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
 
+    # 100 input in simulator using random.seed that will definitely fill up one training center
+    def test_simulator101_outputs_static(self):
+        for centre in self.simulator101.open_centers:
+            self.assertLessEqual(centre, 100, "More than 100 trainees found in a training center.")
 
-
+    # 101 input in simulator using random.seed that will definitely fill up one training center (dynamic)
+    def test_simulator101_outputs_dynamic(self):
+        self.assertEqual(self.simulator101.get_num_of_open_centers(), len(self.simulator101.open_centers), "This is an incorrect number of open centers.")
+        self.assertEqual(self.simulator101.get_num_of_full_centers(), self.simulator101.open_centers.count(100), "This is an incorrect number of full centers.")
+        self.assertEqual(self.simulator101.get_num_working_trainees(), sum(self.simulator101.open_centers), "The number of trainees currently in training is wrong.")
+        self.assertEqual(self.simulator101.get_num_waiting_list(), self.simulator101.num_waiting_list, "We're getting the wrong number or waiting list trainees")
