@@ -44,7 +44,7 @@ class Simulator_tests(unittest.TestCase):
 
     # test the number of open centers
     def test_number_of_open_centers(self):
-        self.assertEqual(self.simulator3.get_num_of_open_centers(), 2, "The number of open centers is not correct.")
+        self.assertEqual(self.simulator3z`.get_num_of_open_centers(), 2, "The number of open centers is not correct.")
         self.assertEqual(self.simulator8.get_num_of_open_centers(), 5, "The number of open centers is not correct.")
 
     # test the number of full centers
@@ -112,7 +112,14 @@ class Simulator_tests(unittest.TestCase):
         title=self.simulation_interface.winfo_toplevel().title()
         self.assertEqual(title, "Simulator")
 
-
+    # tests 3 input in simulator (Dynamic)
+    def test_simulator3_outputs_dynamic(self):
+        self.assertEqual(self.simulator3.open_centers, [90, 78], "Either an incorrect number of open centers or"
+                                                                   "centers not full.")
+        self.assertEqual(self.simulator3.get_num_of_open_centers(), len(self.simulator3.open_centers), "This is an incorrect number of open centers.")
+        self.assertEqual(self.simulator3.get_num_of_full_centers(), self.simulator3.open_centers.count(100), "This is an incorrect number of full centers.")
+        self.assertEqual(self.simulator3.get_num_working_trainees(), sum(self.simulator3.open_centers), "The number of trainees currently training is wrong.")
+        self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
 
 
 
