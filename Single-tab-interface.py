@@ -40,11 +40,11 @@ class SimulationInterface:
 
         # result_label
         Label(self.root, textvariable=self.result_var)\
-            .place(relx=0.5, rely=0.6, anchor=CENTER)
+            .place(relx=0.5, rely=0.5, anchor=CENTER)
 
         # simulation_info
         Label(self.root, textvariable=self.info_var)\
-            .place(relx=0.5, rely=0.65, anchor=CENTER)
+            .place(relx=0.5, rely=0.7, anchor=CENTER)
 
         # reset input
         self.duration_var.set("")
@@ -69,18 +69,22 @@ class SimulationInterface:
 
         # input_label
         Label(self.root, text="Enter Here:")\
-            .place(relx=0.5, rely=0.3, anchor=CENTER)
+            .place(relx=0.5, rely=0.2, anchor=CENTER)
 
         # input_box
         Entry(self.root, textvariable=self.duration_var)\
-            .place(relx=0.5, rely=0.35, anchor=CENTER)
+            .place(relx=0.5, rely=0.25, anchor=CENTER)
 
         # button for when user is ready to run the sim
         Button(self.root, text='Run simulation', command=self.run_sim)\
-            .place(relx=0.5, rely=0.45, anchor=CENTER)
+            .place(relx=0.5, rely=0.35, anchor=CENTER)
 
         self.root.mainloop()
 
 
-if __name__ == "__main__":
+def main():
     interface = SimulationInterface()
+
+
+if __name__ == "__main__":
+    main()

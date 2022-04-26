@@ -20,8 +20,26 @@ class Simulator:
         self.result, self.sim_info = self.simulate()
 
     def simulate(self):
-        result = 'Nothing for now'
-        sim_info = f"Input: {self.duration}"
+        sim_info = f"\
+        Simulation info:\n\
+        Duration: {self.duration} months\n\
+        "
+
+        num_centres = int(min([self.duration * 75 / 100,
+                               self.duration/2]))
+
+        num_full_centres = int(min([self.duration * 75 // 100,
+                                    num_centres]))
+
+        num_training_trainees = int(min([self.duration * 75,
+                                         num_centres * 100]))
+
+        num_waiting_trainees = self.duration * 75 - num_training_trainees
+        result = f"\
+        (Demo) Number of open centres: {num_centres}\n\
+        (Demo) Number of full centres: {num_full_centres}\n\
+        (Demo) Number of trainees in training: {num_training_trainees}\n\
+        (Demo) Number of trainees on the waiting list: {num_waiting_trainees}"
         # print(sim_info)
 
         return result, sim_info
