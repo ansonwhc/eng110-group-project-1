@@ -4,5 +4,9 @@
 # Python
 __pycache__/
 
+# PyTest
+.pytest_cache/
+
 # development
 Multi-tab-interface.py
+test_simulator_local.py
