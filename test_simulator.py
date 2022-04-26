@@ -1,3 +1,17 @@
+# get_num_of_open_centers()
+# get_num_of_full_centers()
+# get_num_working_trainees()
+# get_num_waiting_list()
+
+
+# generate_new_trainees()
+# distribute_trainees()
+
+# open_centers - list
+# num_waiting_list - integer
+
+
+
 import unittest
 import random
 from simulator import Simulator
@@ -35,6 +49,9 @@ class Simulator_tests(unittest.TestCase):
         self.assertEqual(self.simulator3.get_num_working_trainees(), sum(self.simulator3.open_centers), "The number of trainees currently training is wrong.")
         self.assertEqual(self.simulator8.get_num_working_trainees(), sum(self.simulator8.open_centers), "The number of trainees currently training is wrong.")
 
+    def test_get_waiting_trainees(self):
+        self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
+
     def test_centers_do_not_exceed_maximum_trainees(self):
         for centre in self.simulator8.open_centers:
             self.assertLessEqual(centre, 100, "More than 100 trainees found in a training center.")
@@ -52,9 +69,9 @@ class Simulator_tests(unittest.TestCase):
         if self.simulator8.open_centers.count(100) < len(self.simulator8.open_centers):
             self.assertEqual(self.simulator8.num_waiting_list, 0, "Trainees from the waiting list are not being assigned to available centers.")
 
-    def test_simulator0_outputs(self):
-        self.assertEqual(self.simulator1.open_centers[0], 13, "Failed to assign trainees to the open center in a Simulator object with input 0.")
-        self.assertEqual(self.simulator1.num_waiting_list, 65, "Failed to put extra trainees into the waiting list in a Simulator object with input 0.")
+    def test_simulator1_outputs(self):
+        self.assertEqual(self.simulator1.open_centers[0], 13, "Failed to assign trainees to the open center in a Simulator object with input 1.")
+        self.assertEqual(self.simulator1.num_waiting_list, 76, "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
 
     def test_centers_accept_up_to_50_trainees(self):
         obj_lst = [self.simulator3, self.simulator8, self.simulator25]
@@ -64,3 +81,14 @@ class Simulator_tests(unittest.TestCase):
             for i in range(obj.open_centers):
                 added_trainees = obj.open_centers[i] - original_lst[i]
                 self.assertLessEqual(added_trainees, 50, "More than 50 trainees assigned to a training center.")
+
+    def test_simulator0_outputs(self):
+        self.assertEqual(self.simulator0.open_centers, [0], "There is an incorrect number of open centres.")
+        self.assertEqual(self.simulator0.get_num_of_open_centers(), 1, "This is an incorrect number of open centers.")
+        self.assertEqual(self.simulator0.get_num_of_full_centers(), 0, "This is an incorrect number of full centers.")
+        self.assertEqual(self.simulator0.get_num_working_trainees(), 0, "This is the wrong number of working trainees.")
+        self.assertEqual(self.simulator0.get_num_waiting_list(), 0, "This is the wrong number of people on the waiting "
+                                                                    "list.")
+
+    def test_simulator3_outputs(self):
+

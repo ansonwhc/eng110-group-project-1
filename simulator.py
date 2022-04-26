@@ -7,7 +7,7 @@ random.seed(53)
 
 
 # number of trainees generated
-print(random.randrange(0, 101))
+print(random.randrange(50, 101))
 # number of trainees 
 print(random.randrange(0, 51))
 
