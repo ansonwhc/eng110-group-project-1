@@ -13,42 +13,41 @@ class Simulator:
         else:
             self.input = int(self.input)
 
-        self.result = self.simulate()
+        self.result, self.simulation_info = self.simulate()
 
         # internal_variables
         self.open_centers = []
         self.num_waiting_list = 0
 
-        self.simulation_info = ""
-
-    def simulate(self, inp=None) -> (list, str):
+    def simulate(self, inp=None):
         if inp is not None:
             self.input = inp
 
-        self.update_simulation_info()
+        # simulation_info = self.update_simulation_info()
         output = []
-
-        for month in range(self.input):
-            # sample a number of trainees from 50 to 100
-            sampled_num_trainees = self.generate_new_trainees()
-
-            # every two months
-            if (month + 1) % 2 == 0:
-                # add new center
-                self.open_centers.append(0)
-
-            self.distribute_trainees()
-
-        output.extend([self.get_num_of_open_centers(),
-                       self.get_num_of_full_centers(),
-                       self.get_num_working_trainees(),
-                       self.get_num_waiting_list()])
+        simulation_info = ""   # temporary placeholder
+        #
+        # for month in range(self.input):
+        #     # sample a number of trainees from 50 to 100
+        #     sampled_num_trainees = self.generate_new_trainees()
+        #
+        #     # every two months
+        #     if (month + 1) % 2 == 0:
+        #         # add new center
+        #         self.open_centers.append(0)
+        #
+        #     self.distribute_trainees()
+        #
+        # output.extend([self.get_num_of_open_centers(),
+        #                self.get_num_of_full_centers(),
+        #                self.get_num_working_trainees(),
+        #                self.get_num_waiting_list()])
 
         # self.record()
-        return output
+        return output, simulation_info
 
     # Anson
-    def update_simulation_info(self):
+    def update_simulation_info(self, inp):
         # self.simulation_info = duration, for now
         # return simulation info
         pass
@@ -93,5 +92,3 @@ class Simulator:
         # update self.open_centers
         # work here ...
         pass
-
-
