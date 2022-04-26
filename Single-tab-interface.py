@@ -1,5 +1,5 @@
 from tkinter import *
-from Simulation import Simulator
+from Simulation_TK_gp import Simulator
 
 
 class SimulationInterface:
