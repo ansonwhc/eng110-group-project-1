@@ -1,0 +1,13 @@
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+
+# PyTest
+.pytest_cache/
+
+# development
+Multi-tab-interface.py
+local_development.py
+simulation record.csv
