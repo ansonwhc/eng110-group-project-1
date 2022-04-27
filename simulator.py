@@ -3,7 +3,7 @@ class Simulator():
         pass
 
 import random 
-random.seed(53)
+random.seed(102)
 
 
 # number of trainees generated
