@@ -17,9 +17,12 @@ from simulator import Simulator
 
 class Simulator_tests(unittest.TestCase):
 
+
     # test whether or not the simulator is an instance of the class
     def test_instance(self):
-        self.assertIsInstance(self.simulator0, Simulator, "Failed to create an object of the class Simulator.")
+        simulator = Simulator()
+
+        self.assertIsInstance(simulator, Simulator, "Failed to create an object of the class Simulator.")
 
     # # test the data types of the input for the simulator
     # def test_input_type(self):
@@ -46,14 +49,14 @@ class Simulator_tests(unittest.TestCase):
     def test_get_waiting_trainees(self):
         self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
 
+
     # # testing the output where one month was entered in simulator
-    # def test_simulator_outputs(self):
+    # def test_simulator1_outputs(self):
     #     self.assertEqual(self.simulator1.open_centers[0], 13, "Failed to assign trainees to the open center in a Simulator object with input 1.")
     #     self.assertEqual(self.simulator1.num_waiting_list, 76, "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
 
 
-# TKinter BELOW
-
+    #TKinter BELOW
 
     # tests whether the simulator title is a string
     def test_simulator_title_is_string(self):
