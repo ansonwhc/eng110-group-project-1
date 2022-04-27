@@ -142,12 +142,18 @@ class Simulator_tests(unittest.TestCase):
             self.assertGreaterEqual(self.simulator3.generate_new_trainees(), 50,
                                     "Fewer than 50 trainees generated in a month.")
 
+<<<<<<< HEAD
     # testing the output where one month was entered in simulator
     def test_simulator1_outputs(self):
         self.assertEqual(self.simulator1.open_centers[0], 13,
                          "Failed to assign trainees to the open center in a Simulator object with input 1.")
         self.assertEqual(self.simulator1.num_waiting_list, 76,
                          "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
+=======
+    def test_simulator1_outputs(self):
+        self.assertEqual(self.simulator1.open_centers[0], 13, "Failed to assign trainees to the open center in a Simulator object with input 1.")
+        self.assertEqual(self.simulator1.num_waiting_list, 65, "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
+>>>>>>> 8f7807d0dd65c4e2906e66c13df28a1ebf0d5503
 
     # tests whether or not a center accepts up to 50 trainees
     def test_centers_accept_up_to_50_trainees(self):
