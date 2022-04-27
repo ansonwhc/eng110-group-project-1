@@ -1,3 +1,3 @@
 # Group Project
 
-## Anson's branch
+## GUI branch
