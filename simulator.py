@@ -1,12 +1,15 @@
-<<<<<<< HEAD
+import HEAD as HEAD
+
+
 class Simulator():
     def __init__(self, number_of_weeks):
         self.weeknumber = number_of_weeks
         pass
 
-import random 
-random.seed(101)
 
+import random
+
+random.seed(101)
 
 # number of trainees generated
 print(random.randrange(0, 101))
@@ -19,7 +22,6 @@ print(random.randrange(50, 101))
 print(random.randrange(0, 51))
 
 
-=======
 class Simulator:
     def __init__(self,
                  duration: str):
@@ -28,9 +30,9 @@ class Simulator:
         self.input = self.check_input_type(duration)
 
         # internal_variables
-        self.open_centers = [0]   # [open_centre_0, open_centre_1, ..., open_centre_n], where each element in the list\
+        self.open_centers = [0]  # [open_centre_0, open_centre_1, ..., open_centre_n], where each element in the list\
         # represents the number of trainees-in-training in that centre
-        self.num_waiting_list = 0   # number of trainees on the waiting list
+        self.num_waiting_list = 0  # number of trainees on the waiting list
 
         if self.input is not TypeError:
             self.result, self.simulation_info = self.simulate()
@@ -107,45 +109,46 @@ class Simulator:
             inp = self.open_centers
 
         # work here ...
-        return 0   # to delete
+        return 0  # to delete
 
     def get_num_of_full_centers(self, inp=None) -> int:
         # return the number of full centers
         if inp is None:
             inp = self.open_centers
         # work here ...
-        return 0    # to delete
+        return 0  # to delete
 
     def get_num_working_trainees(self, inp=None) -> int:
         # return the number of working trainees
         if inp is None:
             inp = self.open_centers
         # work here ...
-        return 0    # to delete
+        return 0  # to delete
 
     def get_num_waiting_list(self, inp=None) -> int:
         # return the number of trainees on the waiting list
         if inp is None:
             inp = self.open_centers
         # work here ...
-        return 0    # to delete
+        return 0  # to delete
 
+    # Bilal and Shuvo
     def generate_new_trainees(self,
                               lower_bound=None,
                               upper_bound=None) -> int:
         # generate a number of trainees for each month, from 50 to 100
-        # work here ...
-        return 0   # to delete
+        for month in self.generate_new_trainees:
+            newtrainee = random.randint(50, 100)
+        return newtrainee
 
+    # Bilal and Shuvo
     def distribute_trainees(self):
         # update self.open_centers with our sampled number of trainees
         # work here ...
         pass
-
 
 # Refactoring Note (later_TODO):
 # since our class is supposed to be initialised once, and allows for repeated calls on simulate() method
 # it makes sense for us to not run the simulation within the __init__() process
 # It leads to us not requiring <duration> for initialising the class, but needing <duration> as an input
 # in simulate(), i.e. simulate(duration). But this WILL fail the test, so let's not implement this as for now.
->>>>>>> a931113be63d2f79c3eee44b72b21b6f50772fdc

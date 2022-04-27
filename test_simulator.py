@@ -10,27 +10,20 @@
 # open_centers - list
 # num_waiting_list - integer
 
-<<<<<<< HEAD
-import pytest
-import tkinter *
-import unittest
-import random
-from simulator import Simulator
 from Single-tab-interface import SimulationInterface
-=======
+
 
 # from tkinter import *
 import unittest
 import random
 from simulator import Simulator
 # from Single-tab-interface import SimulationInterface
->>>>>>> a931113be63d2f79c3eee44b72b21b6f50772fdc
+
 random.seed(53)
 
 class Simulator_tests(unittest.TestCase):
     
     def setUp(self) -> None:
-<<<<<<< HEAD
         self.simulator0 = Simulator(0)
         self.simulator1 = Simulator(1)
         self.simulator3 = Simulator(3)
@@ -72,7 +65,7 @@ class Simulator_tests(unittest.TestCase):
     # test how many trainees are waiting on the list
     def test_get_waiting_trainees(self):
         self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
-=======
+
         self.simulator0 = Simulator("0")
         self.simulator1 = Simulator("1")
         self.simulator3 = Simulator("3")
@@ -125,7 +118,6 @@ class Simulator_tests(unittest.TestCase):
     def test_get_waiting_trainees(self):
         self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list,
                          "We're getting the wrong number or waiting list trainees")
->>>>>>> a931113be63d2f79c3eee44b72b21b6f50772fdc
 
     # test to see that the centers don't exceed the maximum number of trainees
     def test_centers_do_not_exceed_maximum_trainees(self):
@@ -137,7 +129,7 @@ class Simulator_tests(unittest.TestCase):
     # test that the generate_new_trainees function works
     def test_generate_new_trainees(self):
         for i in range(75):
-<<<<<<< HEAD
+
             self.assertLessEqual(self.simulator3.generate_new_trainees(), 100, "More than 100 trainees generated in a month.")
             self.assertGreaterEqual(self.simulator3.generate_new_trainees(), 50, "Fewer than 50 trainees generated in a month.")
 
@@ -145,7 +137,6 @@ class Simulator_tests(unittest.TestCase):
     def test_simulator1_outputs(self):
         self.assertEqual(self.simulator1.open_centers[0], 13, "Failed to assign trainees to the open center in a Simulator object with input 1.")
         self.assertEqual(self.simulator1.num_waiting_list, 76, "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
-=======
             self.assertLessEqual(self.simulator3.generate_new_trainees(), 100,
                                  "More than 100 trainees generated in a month.")
             self.assertGreaterEqual(self.simulator3.generate_new_trainees(), 50,
@@ -157,7 +148,6 @@ class Simulator_tests(unittest.TestCase):
                          "Failed to assign trainees to the open center in a Simulator object with input 1.")
         self.assertEqual(self.simulator1.num_waiting_list, 76,
                          "Failed to put extra trainees into the waiting list in a Simulator object with input 1.")
->>>>>>> a931113be63d2f79c3eee44b72b21b6f50772fdc
 
     # tests whether or not a center accepts up to 50 trainees
     def test_centers_accept_up_to_50_trainees(self):
@@ -179,13 +169,10 @@ class Simulator_tests(unittest.TestCase):
                                                                     "list.")
     # tests 3 input in simulator
     def test_simulator3_outputs(self):
-<<<<<<< HEAD
         self.assertEqual(self.simulator3.open_centers, [90, 78], "Either an incorrect number of open centers or"
                                                                    "centers not full.")
-=======
         self.assertEqual(self.simulator3.open_centers, [90, 78],
                          "Either an incorrect number of open centers or centers not full.")
->>>>>>> a931113be63d2f79c3eee44b72b21b6f50772fdc
         self.assertEqual(self.simulator3.get_num_of_open_centers(), 2, "This is an incorrect number of open centers.")
         self.assertEqual(self.simulator3.get_num_of_full_centers(), 0, "This is an incorrect number of full centers.")
         self.assertEqual(self.simulator3.get_num_working_trainees(), 168, "This is the wrong number of working "
