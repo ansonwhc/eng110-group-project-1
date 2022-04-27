@@ -32,8 +32,9 @@ class Simulator_tests(unittest.TestCase):
 
     # test the number of open centers
     def test_number_of_open_centers(self):
-        self.assertEqual(self.simulator3.get_num_of_open_centers(), 2, "The number of open centers is not correct.")
-        self.assertEqual(self.simulator8.get_num_of_open_centers(), 5, "The number of open centers is not correct.")
+        simulator = Simulator()
+        self.assertEqual(simulator.calculate_open_centres(), 6,
+                         "The number of open centers is not correct.")
 
     # test the number of full centers
     def test_number_of_full_centers(self):
