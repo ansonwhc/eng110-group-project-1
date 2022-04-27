@@ -42,15 +42,15 @@ class Simulator_tests(unittest.TestCase):
         self.assertEqual(simulator.calculate_full_centres(), 1,
                          "The number of full centres is not correct.")
 
-
     # test the number of working trainees
     def test_number_working_trainees(self):
-        self.assertEqual(self.simulator3.get_num_working_trainees(), sum(self.simulator3.open_centers), "The number of trainees currently training is wrong.")
-        self.assertEqual(self.simulator8.get_num_working_trainees(), sum(self.simulator8.open_centers), "The number of trainees currently training is wrong.")
+        self.assertEqual(simulator.calculate_num_of_trainees(), 3,
+                         "The number of trainees currently training is wrong.")
 
     # test how many trainees are waiting on the list
     def test_get_waiting_trainees(self):
-        self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list, "We're getting the wrong number or waiting list trainees")
+        self.assertEqual(self.simulator3.get_num_waiting_list(), self.simulator3.num_waiting_list,
+                         "We're getting the wrong number or waiting list trainees")
 
 
     # # testing the output where one month was entered in simulator

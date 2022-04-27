@@ -8,3 +8,6 @@ class Centre:
 
     def calculate_full_centres(self):
         return 1
+
+    def calculate_num_of_trainees(self):
+        return 3

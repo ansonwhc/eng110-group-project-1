@@ -1,5 +1,6 @@
 from centre import Centre
 
+
 class Simulator:
     def __init__(self):
         self.centre_class = Centre()
@@ -9,3 +10,6 @@ class Simulator:
 
     def calculate_full_centres(self):
         return self.centre_class.calculate_full_centres()
+
+    def calculate_num_of_trainees(self):
+        return self.centre_class.calcualte_full_centres()
