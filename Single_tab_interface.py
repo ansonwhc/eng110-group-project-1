@@ -4,18 +4,13 @@ from simulator import Simulator
 
 class SimulationInterface:
     def __init__(self,
-                 window_size: str = "600x400",
-                 monthly_output=False):
+                 window_size: str = "600x400"):
         """
         TK interface for running simulations
-
-        :param window_size: intxint, default: 600x400
-        :return: TK_interface window
         """
         # TODO: No implementation on prompting user for errors, e.g. input != numeric
         self.window_size = window_size
-        self.simulator = Simulator()   # this basically does nothing but to initialise the class, ugly, but MVP
-        self.monthly_output = monthly_output
+        self.simulator = Simulator()
         self.create_window()
 
     def export_popup(self):
@@ -39,57 +34,53 @@ class SimulationInterface:
         Button(export_win, text="Cancel", command=export_win.destroy)\
             .place(relx=0.9, rely=0.9, anchor="se")
 
-    def final_output(self):
-        sim_result, sim_info = self.simulator.result, self.simulator.simulation_info
+    def update_output(self):
+        sim_result, sim_info = self.simulator.current_month_output, self.simulator.simulation_info
 
         # set variables for TK_instance's Label objects
         pretty_result = '\n'.join([f"{key}: {value}" for key, value in sim_result.items()])  # prettifying
-        pretty_info = '\n'.join([f"{key}: {value}" for key, value in sim_info.items()])
+        pretty_info = '\n'.join([f"{key}: {value}" for key, value in sim_info.items()])   # prettifying
         self.result_var.set(pretty_result)
         self.info_var.set(pretty_info)
 
         # result_label
-        Label(self.root, textvariable=self.result_var) \
+        Label(self.root, textvariable=self.result_var)\
             .place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        # simulation_info
-        Label(self.root, textvariable=self.info_var) \
+        # simulation_info_label
+        Label(self.root, textvariable=self.info_var)\
             .place(relx=0.5, rely=0.7, anchor=CENTER)
 
-        Button(self.root, text='Export to csv', command=self.popup_bonus) \
+        # bring up a pop-up window to confirm export
+        Button(self.root, text='Export to csv', command=self.export_popup)\
             .place(relx=0.9, rely=0.9, anchor="se")
 
         # reset input
         self.duration_var.set("")
 
-    def monthly_output(self):
-        # print monthly progress
-        # get data at the end - maybe call self.final_output()
-
-        pass
-
     def run_sim(self):
-        # NOTE regarding class attributes initialisation:
-        # 1. current implementation leverages the command argument in Button,
-        #    where to my understanding it accepts callables, but it does not return anything.
-        # 2. Since we cannot return anything within this callable, we either create a new label box,\
-        #    or we need to set attributes such that the TK_instance will have access to our returned variables
-        # ==> Hence the attributes setting within this method
-
         # get user input
         # .get() returns str only?, https://www.tutorialspoint.com/python/tk_entry.htm
-        # maybe self.duration_var = IntVar() works,
-        # but we have not implemented any error handling, so it doesn't help for now.
+        self.monthly_output = False
         duration = self.duration_var.get()
+        # self.simulator.record(duration)
 
         # TODO: print 'Please input an integer' if simulator.input is TypeError
+        # assume self.monthly_output is a check box for the user to tick, such that if being checked, the
+        # *run-simulation button* will display the monthly result
         if self.monthly_output:
+            # when checked
+                # self.simulator.month_simulation()
+                # Label(textvariable = self.simulator.current_month_output)
             pass
 
         else:
-            self.simulator.reset(duration)
-            self.simulator.record()
-            self.final_output()
+            # self.simulator.duration_simulation()
+            # Label(self.simulator.current_month_output OR self.history)
+            # self.simulator.reset(duration)
+            # self.simulator.record()
+            # self.final_output()
+            pass
 
     def create_window(self):
         # TODO: think there should be a better way than using the method place(),
@@ -107,11 +98,14 @@ class SimulationInterface:
         self.result_var = StringVar()
         self.info_var = StringVar()
 
-        # input_label
-        Label(self.root, text="Enter Here:")\
+        # checkoutbox-type of simulating monthly output
+        # if being checked -> self.monthly_output = True
+
+        # input_label - for running whole sim
+        Label(self.root, text="Enter Month Here:")\
             .place(relx=0.5, rely=0.2, anchor=CENTER)
 
-        # input_box
+        # input_box - if monthly-checkbox is checked, the entry does nothing (preferred)
         Entry(self.root, textvariable=self.duration_var)\
             .place(relx=0.5, rely=0.25, anchor=CENTER)
 
