@@ -6,6 +6,11 @@ class Simulator():
         self.weeknumber = number_of_weeks
         pass
 
+<<<<<<< HEAD
+=======
+import random 
+random.seed(102)
+>>>>>>> 11f140462383547d0ebecf9c9e5b35c3dec81f54
 
 import random
 
