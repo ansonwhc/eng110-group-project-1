@@ -34,9 +34,8 @@ class Trainee:
         return dict
 
 
-
+if __name__ == "__main__":
 
 trainee1 = Trainee()
 print(trainee1.generate_new_trainees())
 
-    # for the trainee class assign trainees to their course, and outputs a dictionary
