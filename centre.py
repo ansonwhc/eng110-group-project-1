@@ -11,3 +11,6 @@ class Centre:
 
     def calculate_num_of_trainees(self):
         return 3
+
+    def calculate_num_of_waiting_list(self):
+        return 2

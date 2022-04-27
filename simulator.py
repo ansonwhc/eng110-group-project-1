@@ -12,4 +12,7 @@ class Simulator:
         return self.centre_class.calculate_full_centres()
 
     def calculate_num_of_trainees(self):
-        return self.centre_class.calcualte_full_centres()
+        return self.centre_class.calculate_num_of_trainees()
+
+    def calculate_num_of_waiting_list(self):
+        return self.centre_class.calculate_num_of_waiting_list()
