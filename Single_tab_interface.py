@@ -1,5 +1,5 @@
 from tkinter import *
-from Record import Record
+from simulator import Simulator
 
 
 class SimulationInterface:
@@ -14,11 +14,12 @@ class SimulationInterface:
         """
         # TODO: No implementation on prompting user for errors, e.g. input != numeric
         self.window_size = window_size
-        self.simulator = Record("0")   # this basically does nothing but to initialise the class, ugly, but MVP
+        self.simulator = Simulator()   # this basically does nothing but to initialise the class, ugly, but MVP
         self.monthly_output = monthly_output
         self.create_window()
 
-    def popup_bonus(self):
+    def export_popup(self):
+        """pop-up window for setting export_file name nad pressing the <export> button"""
         export_win = Toplevel()
         export_win.geometry('300x100')
         export_win.wm_title("Export to csv")
@@ -32,7 +33,7 @@ class SimulationInterface:
             .place(relx=0.5, rely=0.4, anchor=CENTER, width=250)
 
         Button(export_win, text="Export",
-               command=lambda: (self.simulator.export(self.file_name_var.get()), export_win.destroy()))\
+               command=lambda: (self.simulator.export_to_csv(self.file_name_var.get()), export_win.destroy()))\
             .place(relx=0.7, rely=0.9, anchor="se")
 
         Button(export_win, text="Cancel", command=export_win.destroy)\

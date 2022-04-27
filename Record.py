@@ -31,7 +31,7 @@ class Record(Simulator):
             self.record_dict["data"].append([*self.result.values(),
                                              *self.simulation_info.values()])
 
-    def export(self, file_name="simulation record", extension="csv"):
+    def export_to_csv(self, file_name="simulation record", extension="csv"):
         if extension == "csv":
             file_name = re.sub("[^a-zA-Z0-9 /:]", "", file_name)   # can we not use re?
             with open(f"{file_name}.{extension}", "w", newline="") as file:
