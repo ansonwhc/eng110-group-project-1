@@ -26,3 +26,18 @@ class Simulator:
         self.current_month_output = self.centre_class.update_current_month_output()
         self.history.append(self.current_month_output)
         return self.history
+
+    # Pseudocode
+
+    # month_simulation():
+        # all computations from centre_class
+        # self.calculate_open_centres()
+        # self.calculate_full_centres()
+        # self.calculate_num_of_trainees()
+        # self.calculate_num_of_waiting_list()
+        # self.calculate_closed_centres()
+        # self.current_month_output = centre_class_output
+
+    # duration_simulation():
+        # for month in duration:
+            # month_simulation()
