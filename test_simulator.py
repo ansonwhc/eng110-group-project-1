@@ -30,16 +30,18 @@ class Simulator_tests(unittest.TestCase):
     #     self.assertEqual(self.simulator_float.input, False, "The class accepts floats as inputs.")
     #     self.assertEqual(self.simulator_negative.input, False, "The class accepts negative values as inputs.")
 
-    # test the number of open centers
+    # test the number of open centres
     def test_number_of_open_centers(self):
         simulator = Simulator()
         self.assertEqual(simulator.calculate_open_centres(), 6,
-                         "The number of open centers is not correct.")
+                         "The number of open centres is not correct.")
 
-    # test the number of full centers
+    # test the number of full centres
     def test_number_of_full_centers(self):
-        self.assertEqual(self.simulator8.get_num_of_full_centers(), self.simulator8.open_centers.count(100), "The number of full centers is not correct.")
-        self.assertEqual(self.simulator25.get_num_of_full_centers(), self.simulator25.open_centers.count(100), "The number of full centers is not correct.")
+        simulator = Simulator()
+        self.assertEqual(self.simulator.calculate_full_centres(), self.simulator.open_centres.count(100),
+                         "The number of full centres is not correct.")
+
 
     # test the number of working trainees
     def test_number_working_trainees(self):
