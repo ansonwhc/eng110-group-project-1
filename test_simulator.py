@@ -10,7 +10,7 @@
 # open_centers - list
 # num_waiting_list - integer
 
-
+import pytest
 import tkinter *
 import unittest
 import random
