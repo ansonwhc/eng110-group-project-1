@@ -1,16 +1,71 @@
 from tkinter import *
-from Simulation_TK_gp import Simulator
+from Record import Record
 
 
 class SimulationInterface:
-    def __init__(self, window_size: str = "600x400"):
+    def __init__(self,
+                 window_size: str = "600x400",
+                 monthly_output=False):
         """
+        TK interface for running simulations
+
         :param window_size: intxint, default: 600x400
         :return: TK_interface window
         """
         # TODO: No implementation on prompting user for errors, e.g. input != numeric
         self.window_size = window_size
+        self.simulator = Record("0")   # this basically does nothing but to initialise the class, ugly, but MVP
+        self.monthly_output = monthly_output
         self.create_window()
+
+    def popup_bonus(self):
+        export_win = Toplevel()
+        export_win.geometry('300x100')
+        export_win.wm_title("Export to csv")
+
+        Label(export_win, text="File name:").place(relx=0.15, rely=0.15, anchor=CENTER)
+
+        self.file_name_var = StringVar()
+        self.file_name_var.set("simulation record")
+
+        Entry(export_win, textvariable=self.file_name_var)\
+            .place(relx=0.5, rely=0.4, anchor=CENTER, width=250)
+
+        Button(export_win, text="Export",
+               command=lambda: (self.simulator.export(self.file_name_var.get()), export_win.destroy()))\
+            .place(relx=0.7, rely=0.9, anchor="se")
+
+        Button(export_win, text="Cancel", command=export_win.destroy)\
+            .place(relx=0.9, rely=0.9, anchor="se")
+
+    def final_output(self):
+        sim_result, sim_info = self.simulator.result, self.simulator.simulation_info
+
+        # set variables for TK_instance's Label objects
+        pretty_result = '\n'.join([f"{key}: {value}" for key, value in sim_result.items()])  # prettifying
+        pretty_info = '\n'.join([f"{key}: {value}" for key, value in sim_info.items()])
+        self.result_var.set(pretty_result)
+        self.info_var.set(pretty_info)
+
+        # result_label
+        Label(self.root, textvariable=self.result_var) \
+            .place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        # simulation_info
+        Label(self.root, textvariable=self.info_var) \
+            .place(relx=0.5, rely=0.7, anchor=CENTER)
+
+        Button(self.root, text='Export to csv', command=self.popup_bonus) \
+            .place(relx=0.9, rely=0.9, anchor="se")
+
+        # reset input
+        self.duration_var.set("")
+
+    def monthly_output(self):
+        # print monthly progress
+        # get data at the end - maybe call self.final_output()
+
+        pass
 
     def run_sim(self):
         # NOTE regarding class attributes initialisation:
@@ -26,35 +81,19 @@ class SimulationInterface:
         # but we have not implemented any error handling, so it doesn't help for now.
         duration = self.duration_var.get()
 
-        # changing user input to int
-        # TODO: assert duration_var isnumeric (could be done within Simulation class)
-        duration = int(duration)
+        # TODO: print 'Please input an integer' if simulator.input is TypeError
+        if self.monthly_output:
+            pass
 
-        # pass the input onto the class
-        simulator = Simulator(duration)
-        sim_result, sim_info = simulator.result, simulator.sim_info
-
-        # set variables for TK_instance's Label objects
-        self.result_var.set(sim_result)
-        self.info_var.set(sim_info)
-
-        # result_label
-        Label(self.root, textvariable=self.result_var)\
-            .place(relx=0.5, rely=0.5, anchor=CENTER)
-
-        # simulation_info
-        Label(self.root, textvariable=self.info_var)\
-            .place(relx=0.5, rely=0.7, anchor=CENTER)
-
-        # reset input
-        self.duration_var.set("")
+        else:
+            self.simulator.reset(duration)
+            self.simulator.record()
+            self.final_output()
 
     def create_window(self):
         # TODO: think there should be a better way than using the method place(),
         #  maybe pack() or grid()? \
         #  Because right now it is using relative position rather than absolute
-
-        # TODO: Export button - for exporting input, simulation info, outputs
 
         # create an instance of the Tk class
         self.root = Tk()
@@ -83,7 +122,7 @@ class SimulationInterface:
 
 
 def main():
-    interface = SimulationInterface()
+    SimulationInterface()
 
 
 if __name__ == "__main__":

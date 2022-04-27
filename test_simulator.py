@@ -16,7 +16,7 @@ from Single-tab-interface import SimulationInterface
 # from tkinter import *
 import unittest
 import random
-from simulator import Simulator
+from Simulator import Simulator
 # from Single-tab-interface import SimulationInterface
 
 random.seed(53)
@@ -180,9 +180,9 @@ class Simulator_tests(unittest.TestCase):
         self.assertEqual(self.simulator3.get_num_waiting_list(), 80, "This is the wrong number of people on the "
                                                                      "waiting list.")
     # tests whether the simulator title is a string
-    def test_simulator_title_is_string(self):
-        title=self.simulation_interface.winfo_toplevel().title()
-        self.assertEqual(title, "Simulator")
+    # def test_simulator_title_is_string(self):
+    #     title=self.simulation_interface.winfo_toplevel().title()
+    #     self.assertEqual(title, "Simulator")
 
     # tests 3 input in simulator (Dynamic)
     def test_simulator3_outputs_dynamic(self):
