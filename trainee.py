@@ -2,7 +2,9 @@ import random
 
 
 class Trainee:
-    pass
+
+    def __init__(self):
+        pass
 
     # generate method for trainee class to calculate random number between 50-100 to decide how many trainees
     def generate_new_trainees(self):
@@ -34,8 +36,8 @@ class Trainee:
         return dict
 
 
-if __name__ == "__main__":
 
-trainee1 = Trainee()
-print(trainee1.generate_new_trainees())
+
+
+
 
