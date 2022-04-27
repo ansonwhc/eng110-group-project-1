@@ -54,6 +54,14 @@ class Simulator_tests(unittest.TestCase):
         self.assertEqual(simulator.calculate_num_of_waiting_list(), 2,
                          "We're getting the wrong number or waiting list trainees")
 
+    def test_calculate_closed_centres(self):
+        simulator = Simulator()
+        self.assertEqual(simulator.calculate_closed_centres(), 5, "Wrong number of closed centres")
+
+    def test_add_to_history(self):
+        simulator = Simulator()
+        simulator.add_to_history()
+        self.assertEqual(len(simulator.history), 1, "Wrong length")
 
     # # testing the output where one month was entered in simulator
     # def test_simulator1_outputs(self):
@@ -64,9 +72,9 @@ class Simulator_tests(unittest.TestCase):
     #TKinter BELOW
 
     # tests whether the simulator title is a string
-    def test_simulator_title_is_string(self):
-        title=self.simulation_interface.winfo_toplevel().title()
-        self.assertEqual(title, "Simulator")
+    # def test_simulator_title_is_string(self):
+    #     title=self.simulation_interface.winfo_toplevel().title()
+    #     self.assertEqual(title, "Simulator")
 
 
 

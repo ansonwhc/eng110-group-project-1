@@ -14,3 +14,9 @@ class Centre:
 
     def calculate_num_of_waiting_list(self):
         return 2
+
+    def calculate_closed_centres(self):
+        return 5
+
+    def update_current_month_output(self):
+        return {"result": 0}
