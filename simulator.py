@@ -6,3 +6,6 @@ class Simulator:
 
     def calculate_open_centres(self):
         return self.centre_class.calculate_open_centres()
+
+    def calculate_full_centres(self):
+        return self.centre_class.calculate_full_centres()

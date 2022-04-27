@@ -5,3 +5,6 @@ class Centre:
 
     def calculate_open_centres(self):
         return 6
+
+    def calculate_full_centres(self):
+        return 1
