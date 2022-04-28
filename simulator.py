@@ -1,4 +1,6 @@
 from center import Center
+import csv
+import re
 
 
 # one_single_center = {
@@ -10,21 +12,24 @@ from center import Center
 # all_centers = [one_single_center #1, one_single_center #2, ...]
 
 class Simulator:
-    def __init__(self):
+    def __init__(self,
+                 center_full_requirements: dict = None):
         self.current_month_output = {}
         self.history = []
         self.center_class = Center()
 
+        if center_full_requirements is None:
+            center_full_requirements = {"training_hub": 100, "bootcamp": 500, "tech_center": 200}
         # {"type_of_center" : num_of_trainees_to_count_as_a_full_center}
-        self.center_full_requirements = {"training_hub": 100, "bootcamp": 500, "tech_center": 200}
-        self.type = self.center_full_requirements.keys()
+        self.center_full_requirements = center_full_requirements
+        self.center_type = self.center_full_requirements.keys()
 
         self.courses = ["Java", "C#", "Data", "DevOps", "Business"]
 
     def calculate_open_centers(self, inp=None):
         if inp is None:
             inp = self.center_class.all_centers
-        result = dict.fromkeys(self.type, 0)
+        result = dict.fromkeys(self.center_type, 0)
         for center in inp:
             if center['open'] == 'yes':
                 result[center['type']] += 1
@@ -33,7 +38,7 @@ class Simulator:
     def calculate_full_centers(self, inp=None):
         if inp is None:
             inp = self.center_class.all_centers
-        result = dict.fromkeys(self.type, 0)
+        result = dict.fromkeys(self.center_type, 0)
         for center in inp:
             if center['open'] == 'yes':
                 # getting the total number of trainees in that center
@@ -61,7 +66,7 @@ class Simulator:
     def calculate_closed_centers(self, inp):
         if inp is None:
             inp = self.center_class.all_centers
-        result = dict.fromkeys(self.type, 0)
+        result = dict.fromkeys(self.center_type, 0)
         for center in inp:
             if center['open'] == 'no':
                 result[center['type']] += 1
@@ -87,6 +92,18 @@ class Simulator:
         # for month in duration:
             # month_simulation()
 
+    def export_to_csv(self, file_name="simulation record", extension="csv"):
+        if extension == "csv":
+            file_name = re.sub("[^a-zA-Z0-9 /:]", "", file_name)   # can we not use re?
+            with open(f"{file_name}.{extension}", "w", newline="") as file:
+
+                writer = csv.writer(file)
+                writer.writerow(self.record_dict["headers"])
+
+                for data in self.record_dict["data"]:
+                    writer.writerow(data)
+        else:
+            return NotImplementedError
 
 if __name__ == "__main__":
     all_centers = [

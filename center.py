@@ -1,4 +1,4 @@
-class Centre:
+class Center:
 
     def __init__(self):
         pass
