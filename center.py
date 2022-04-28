@@ -49,10 +49,84 @@ class Center():
             # Creates a new id for the tech center 
             self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {}})
 
-
     def push_to_waiting_list(self, trainee):
         for trainee_key in trainee.keys():
             self.waiting_list_dictionary[trainee_key] += trainee[trainee_key]
+
+    def distribution_sampling_center_in_take(self):
+        # deciding how many trainees to send to each center
+        # sample_dic = {
+        #     "Java": 14,
+        #     "C#": 13,
+        #     "Data": 12,
+        #     "DevOps": 6,
+        #     "Business": 10 }
+        # try a code to assess if the centers are full or not
+        max_capacity = {
+            "training_hub": 100,
+            "bootcamp": 500,
+            "tech_center": 200}
+        # TODO: if center any center is full add the trainees to another center until all centers are full
+        # setting conditions as whether the center are open and have numb_trainees lees than their max limit
+        each_center_take_in = []
+        for center in self.all_centers:
+            center_type = center['type']
+            condition_1 = (center['open'] == 'yes')
+            num_trainee_in_center = sum(center['trainee'].values())
+            condition_2 = (num_trainee_in_center < max_capacity[center_type])
+            if condition_1 and condition_2:
+                each_center_take_in.append(random.randint(0, 50))
+            else:
+                each_center_take_in.append(0)
+
+    def assess_availability(self):
+        # Assessing whether our center can take the sample number of trainees
+        for center, num_take_in in zip(self.all_centers, each_center_take_in):
+            center_type = center['type']
+            available_num = max_capacity[center_type] - sum(center["trainee"].values()) + num_take_in
+            if available_num > 0:
+            # Center is still available
+                self.available_num_lg_0()
+            elif available_num == 0:
+            # If they're equal the center is full
+                self.available_num_eq_0()
+            else:
+            # For when sampled number of trainees exceeded the center capacity
+                self.available_num_ls_0()
+    def available_num_lg_0(self):
+        pass
+
+    def available_num_eq_0(self):
+        pass
+
+    def available_num_ls_0(self):
+        pass
+
+            # If the trainee_num is more than the space available in the center, the center will simply not accept it
+
+
+        # If all centers are full return the trainees to the waiting_list
+
+
+
+
+        # randomly generated trainees need to be allocated to the course types of the waiting_list
+
+
+
+
+
+
+
+
+# distribute from the waiting_list
+# (random 0 - 50) -> random = 1 -> 1 =10 %, 4 = 40 % ,6 = 60% -> 100% ->
+
+
+    # while the number of trainees is >= 0
+    # then we would run all of the while codes
+
+
 
 if __name__ == "__main__":
     example_dict = {
