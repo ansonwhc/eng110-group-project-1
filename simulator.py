@@ -64,7 +64,8 @@ class Simulator:
     def calculate_num_of_waiting_list(self, inp=None):
         if inp is None:
             inp = self.center_class.waiting_list_dictionary
-        return inp
+            out = inp.copy()
+        return out
 
     def calculate_closed_centers(self, inp=None):
         if inp is None:
@@ -74,10 +75,6 @@ class Simulator:
             if center['open'] == 'no':
                 result[center['type']] += 1
         return result
-
-    def add_to_history(self):
-        self.history.append(self.current_month_output)
-        return self.history
 
     def month_simulation(self, open_new_center: bool):
         if open_new_center:
@@ -91,39 +88,51 @@ class Simulator:
             "DevOps": 32,
             "Business": 9})
         # to be reviewed after center_class
-
+        print(self.center_class.all_centers)
         # all computations from center_class
         num_open_centers = self.calculate_open_centers()
         num_full_centers = self.calculate_full_centers()
         num_of_trainees = self.calculate_num_of_trainees()
         num_of_waiting_list = self.calculate_num_of_waiting_list()
+        # print(num_of_waiting_list)
         num_closed_centers = self.calculate_closed_centers()
-        self.current_month_output = {"number of open centers": num_open_centers,
-                                     "number of closed centers": num_closed_centers,
-                                     "number of full centers": num_full_centers,
-                                     "number of trainees": num_of_trainees,
-                                     "number of trainees on waiting list": num_of_waiting_list}
-        self.add_to_history()
-        return self.current_month_output
+        current_month_output = {"number of open centers": num_open_centers,
+                                "number of closed centers": num_closed_centers,
+                                "number of full centers": num_full_centers,
+                                "number of trainees": num_of_trainees,
+                                "number of trainees on waiting list": num_of_waiting_list}
+        self.history.append(current_month_output)
+        self.current_month_output = current_month_output
 
     def duration_simulation(self, duration):
         for month in range(duration):
             open_new_center = False
-            if month + 1 % 2 == 0:
+            if (month + 1) % 2 == 0:
                 open_new_center = True
             self.month_simulation(open_new_center)
-        return self.history
 
-    def export_to_csv(self, file_name="simulation record", extension="csv"):
+    def export_to_csv(self, file_name="simulation_record", extension="csv"):
         if extension == "csv":
-            file_name = re.sub("[^a-zA-Z0-9 /:]", "", file_name)   # can we not use re?
+            file_name = re.sub("[^a-zA-Z0-9 /:_]", "", file_name)   # can we not use re?
             with open(f"{file_name}.{extension}", "w", newline="") as file:
 
                 writer = csv.writer(file)
-                # writer.writerow(self.history["headers"])
-                #
-                # for data in self.history["data"]:
-                #     writer.writerow(data)
+                headers = []
+                for monthly_key, monthly_result in self.history[-1].items():
+                    headers.extend([f"{monthly_key} -- {key}" for key in monthly_result.keys()])
+                    headers.append(f"{monthly_key} -- total")
+                writer.writerow(headers)
+
+                for month in self.history:
+                    data = []
+                    for main_result in month.values():
+                        aggregate = 0   # for calculating total
+                        for specific_result in main_result.values():
+                            data.append(specific_result)
+                            aggregate += specific_result
+                        data.append(aggregate)
+                    writer.writerow(data)
+
         else:
             return NotImplementedError
 
@@ -152,21 +161,23 @@ if __name__ == "__main__":
         }
         ]
 
+    # simulator = Simulator()
+    # open_centers = simulator.calculate_open_centers(all_centers)
+    # print("open", open_centers)
+    # closed_centers = simulator.calculate_closed_centers(all_centers)
+    # print("closed", closed_centers)
+    # full_centers = simulator.calculate_full_centers(all_centers)
+    # print("full", full_centers)
+    # num_trainees = simulator.calculate_num_of_trainees(all_centers)
+    # print("trainee", num_trainees)
+    # simulator.month_simulation(False)
+    # print("no gen month output")
+    # pprint(simulator.current_month_output)
+    # simulator.month_simulation(True)
+    # print("gen month output")
+    # pprint(simulator.current_month_output)
     simulator = Simulator()
-    open_centers = simulator.calculate_open_centers(all_centers)
-    print("open", open_centers)
-    closed_centers = simulator.calculate_closed_centers(all_centers)
-    print("closed", closed_centers)
-    full_centers = simulator.calculate_full_centers(all_centers)
-    print("full", full_centers)
-    num_trainees = simulator.calculate_num_of_trainees(all_centers)
-    print("trainee", num_trainees)
-    simulator.month_simulation(False)
-    print("no gen month output")
-    pprint(simulator.current_month_output)
-    simulator.month_simulation(True)
-    print("gen month output")
-    pprint(simulator.current_month_output)
-    simulator = Simulator()
-    simulator.duration_simulation(3)
-    pprint(simulator.history)
+    simulator.duration_simulation(5)
+    # pprint(simulator.history)
+
+    simulator.export_to_csv()
