@@ -48,8 +48,14 @@ class Simulator:
     def calculate_num_of_waiting_list(self):
         return self.center_class.calculate_num_of_waiting_list()
 
-    def calculate_closed_centers(self):
-        return self.center_class.calculate_closed_centers()
+    def calculate_closed_centers(self, inp):
+        if inp is None:
+            inp = self.center_class.all_centers
+        result = dict.fromkeys(self.type, 0)
+        for center in inp:
+            if center['open'] == 'no':
+                result[center['type']] += 1
+        return result
 
     def add_to_history(self):
         self.current_month_output = self.center_class.update_current_month_output()
@@ -88,11 +94,18 @@ if __name__ == "__main__":
             "open": "yes",
             "type": "training_hub",
             "trainee": {"java": 50, "C#": 50}
+        },
+        {
+            "open": "no",
+            "type": "training_hub",
+            "trainee": {"java": 50, "C#": 50}
         }
         ]
 
     simulator = Simulator()
     open_centers = simulator.calculate_open_centers(all_centers)
-    print(open_centers)
+    print("open", open_centers)
+    closed_centers = simulator.calculate_closed_centers(all_centers)
+    print("closed", closed_centers)
     full_centers = simulator.calculate_full_centers(all_centers)
-    print(full_centers)
+    print("full", full_centers)
