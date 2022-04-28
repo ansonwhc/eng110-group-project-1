@@ -42,8 +42,17 @@ class Simulator:
                 result[center['type']] += full_or_not
         return result
 
-    def calculate_num_of_trainees(self):
-        return self.center_class.calculate_num_of_trainees()
+    def calculate_num_of_trainees(self, inp=None):
+        if inp is None:
+            inp = self.center_class.all_centers
+        result = dict.fromkeys(self.courses, 0)
+        for center in inp:
+            if center['open'] == 'yes':  # just to make sure
+                center_trainee = center['trainee']
+                for course, num in center['trainee'].items():
+                    result[course] += num
+        return result
+
 
     def calculate_num_of_waiting_list(self):
         return self.center_class.calculate_num_of_waiting_list()
@@ -83,22 +92,22 @@ if __name__ == "__main__":
         {
             "open": "yes",
             "type": "tech_center",
-            "trainee": {"java": 200}
+            "trainee": {"Java": 200}
         },
         {
             "open": "yes",
             "type": "bootcamp",
-            "trainee": {"java": 250, "C#": 4}
+            "trainee": {"Java": 250, "C#": 4}
         },
         {
             "open": "yes",
             "type": "training_hub",
-            "trainee": {"java": 50, "C#": 50}
+            "trainee": {"Java": 50, "C#": 50}
         },
         {
             "open": "no",
             "type": "training_hub",
-            "trainee": {"java": 50, "C#": 50}
+            "trainee": {"Java": 50, "C#": 50}
         }
         ]
 
@@ -109,3 +118,5 @@ if __name__ == "__main__":
     print("closed", closed_centers)
     full_centers = simulator.calculate_full_centers(all_centers)
     print("full", full_centers)
+    num_trainees = simulator.calculate_num_of_trainees(all_centers)
+    print("trainee", num_trainees)
