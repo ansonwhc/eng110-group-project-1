@@ -77,8 +77,8 @@ class Simulator:
     def calculate_num_of_waiting_list(self, inp=None):
         if inp is None:
             inp = self.center_class.waiting_list_dictionary
-            out = inp.copy()
-        return out
+        num_of_waiting_list = inp.copy()
+        return num_of_waiting_list
 
     def calculate_closed_centers(self, inp=None):
         if inp is None:
@@ -193,6 +193,6 @@ if __name__ == "__main__":
     # pprint(simulator.current_month_output)
     simulator = Simulator()
     simulator.duration_simulation(5)
-    # pprint(simulator.history)
+    pprint(simulator.history)
 
     simulator.export_to_csv()
