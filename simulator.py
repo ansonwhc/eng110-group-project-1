@@ -1,14 +1,30 @@
 from centre import Centre
 
 
+# one_single_centre = {
+#     "open": "yes",
+#     "type": "training_hub/bootcamp/tech_centre",
+#     "trainee": {"java": 0, "C#":0, ...}
+# }
+
+# all_centres = [one_single_centre #1, one_single_centre #2, ...]
+
 class Simulator:
     def __init__(self):
         self.current_month_output = {}
         self.history = []
         self.centre_class = Centre()
+        self.type = ["training_hub", "bootcamp", "tech_centre"]
+        self.courses = ["Java", "C#", "Data", "DevOps", "Business"]
 
-    def calculate_open_centres(self):
-        return self.centre_class.calculate_open_centres()
+    def calculate_open_centres(self, inp=None):
+        if inp is None:
+            inp = self.centre_class.all_centres
+        result = dict.fromkeys(self.type, 0)
+        for centre in inp:
+            if centre['open'] == 'yes':
+                result[centre['type']] += 1
+        return result
 
     def calculate_full_centres(self):
         return self.centre_class.calculate_full_centres()
@@ -41,3 +57,22 @@ class Simulator:
     # duration_simulation():
         # for month in duration:
             # month_simulation()
+
+
+if __name__ == "__main__":
+    all_centres = [
+        {
+            "open": "yes",
+            "type": "training_hub",
+            "trainee": {"java": 0, "C#":0}
+        },
+        {
+            "open": "yes",
+            "type": "bootcamp",
+            "trainee": {"java": 0, "C#": 0}
+        }
+        ]
+
+    simulator = Simulator()
+    open_centres = simulator.calculate_open_centres(all_centres)
+    print(open_centres)
