@@ -14,7 +14,11 @@ class Simulator:
         self.current_month_output = {}
         self.history = []
         self.center_class = Center()
-        self.type = ["training_hub", "bootcamp", "tech_center"]
+
+        # {"type_of_center" : num_of_trainees_to_count_as_a_full_center}
+        self.center_full_requirements = {"training_hub": 100, "bootcamp": 500, "tech_center": 200}
+        self.type = self.center_full_requirements.keys()
+
         self.courses = ["Java", "C#", "Data", "DevOps", "Business"]
 
     def calculate_open_centers(self, inp=None):
@@ -32,13 +36,12 @@ class Simulator:
         result = dict.fromkeys(self.type, 0)
         for center in inp:
             if center['open'] == 'yes':
-                center_type = center['type']
-                if center_type == "training_hub":
-                    full_or_not = (sum(center['trainee'].values()) == 100)
-                elif center_type == "bootcamp":
-                    full_or_not = (sum(center['trainee'].values()) == 500)
-                else:
-                    full_or_not = (sum(center['trainee'].values()) == 200)
+                # getting the total number of trainees in that center
+                num_of_trainees = sum(center['trainee'].values())
+                # getting the max number of trainees
+                max_num_of_trainees = self.center_full_requirements[center['type']]
+                full_or_not = (num_of_trainees == max_num_of_trainees)
+                # add to our result
                 result[center['type']] += full_or_not
         return result
 
@@ -48,11 +51,9 @@ class Simulator:
         result = dict.fromkeys(self.courses, 0)
         for center in inp:
             if center['open'] == 'yes':  # just to make sure
-                center_trainee = center['trainee']
                 for course, num in center['trainee'].items():
                     result[course] += num
         return result
-
 
     def calculate_num_of_waiting_list(self):
         return self.center_class.calculate_num_of_waiting_list()
