@@ -78,6 +78,7 @@ class Center():
                 each_center_take_in.append(random.randint(0, 50))
             else:
                 each_center_take_in.append(0)
+        return each_center_take_in
 
     def assess_availability(self, each_center_take_in):
         max_capacity = {

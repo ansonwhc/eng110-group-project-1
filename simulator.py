@@ -33,10 +33,10 @@ class Simulator:
 
     @staticmethod
     def input_type_check(inp):
-        condition_1 = isinstance(inp, str)
-        condition_2 = not inp.isdigit()
-        condition_3 = (type(inp) == float)
-        if (condition_1 and condition_2) or condition_3:
+        if isinstance(inp, str):
+            if not inp.isdigit():
+                return TypeError
+        elif isinstance(inp, float):
             return TypeError
         return int(inp)
 
@@ -101,7 +101,6 @@ class Simulator:
             "DevOps": 32,
             "Business": 9})
         # to be reviewed after center_class
-        print(self.center_class.all_centers)
         # all computations from center_class
         num_open_centers = self.calculate_open_centers()
         num_full_centers = self.calculate_full_centers()
