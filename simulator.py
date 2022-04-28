@@ -27,6 +27,19 @@ class Simulator:
 
         self.courses = self.center_class.waiting_list_dictionary
 
+    def reset_history(self):
+        self.current_month_output = {}
+        self.history = []
+
+    @staticmethod
+    def input_type_check(inp):
+        condition_1 = isinstance(inp, str)
+        condition_2 = not inp.isdigit()
+        condition_3 = (type(inp) == float)
+        if (condition_1 and condition_2) or condition_3:
+            return TypeError
+        return int(inp)
+
     def calculate_open_centers(self, inp=None):
         if inp is None:
             inp = self.center_class.all_centers
@@ -105,6 +118,9 @@ class Simulator:
         self.current_month_output = current_month_output
 
     def duration_simulation(self, duration):
+        duration = self.input_type_check(duration)
+        if duration == TypeError:
+            return
         for month in range(duration):
             open_new_center = False
             if (month + 1) % 2 == 0:

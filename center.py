@@ -38,7 +38,7 @@ class Center():
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
-            self.all_centers.append({"open": "yes", "type": "training_hubs", "trainee": {}})
+            self.all_centers.append({"open": "yes", "type": "training_hub", "trainee": {}})
         # Bootcamp
         elif random_num == 2:
             self.all_centers.append({"open": "yes", "type": "bootcamp", "trainee": {}})
@@ -79,7 +79,11 @@ class Center():
             else:
                 each_center_take_in.append(0)
 
-    def assess_availability(self):
+    def assess_availability(self, each_center_take_in):
+        max_capacity = {
+            "training_hub": 100,
+            "bootcamp": 500,
+            "tech_center": 200}
         # Assessing whether our center can take the sample number of trainees
         for center, num_take_in in zip(self.all_centers, each_center_take_in):
             center_type = center['type']
