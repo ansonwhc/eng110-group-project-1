@@ -22,7 +22,7 @@ class SimulationInterface:
         Label(export_win, text="File name:").place(relx=0.15, rely=0.15, anchor=CENTER)
 
         self.file_name_var = StringVar()
-        self.file_name_var.set("simulation record")
+        self.file_name_var.set("simulation_record")
 
         Entry(export_win, textvariable=self.file_name_var)\
             .place(relx=0.5, rely=0.4, anchor=CENTER, width=250)
@@ -68,19 +68,30 @@ class SimulationInterface:
         # TODO: print 'Please input an integer' if simulator.input is TypeError
         # assume self.monthly_output is a check box for the user to tick, such that if being checked, the
         # *run-simulation button* will display the monthly result
-        if self.monthly_output:
-            # when checked
-                # self.simulator.month_simulation()
-                # Label(textvariable = self.simulator.current_month_output)
-            pass
+        # if var1:
+        #     Button(self.root, text='123')\
+        #         .place(relx=0.9, rely=0.9, anchor="se")
+        #
+        #     # when checked
+        #         # self.simulator.month_simulation()
+        #         # Label(textvariable = self.simulator.current_month_output)
+        #     pass
+        #
+        # else:
+        #     # self.simulator.duration_simulation()
+        #     # Label(self.simulator.current_month_output OR self.history)
+        #     # self.simulator.reset(duration)
+        #     # self.simulator.record()
+        #     # self.final_output()
+        #     pass
 
+    def set_simulate_month(self):
+        # set self.simulate_next_month to its opposite boolean
+        self.simulate_next_month = not self.simulate_next_month
+        if self.simulate_next_month:
+            self.run_simulation_button_text_var.set("Simulate Next Month")
         else:
-            # self.simulator.duration_simulation()
-            # Label(self.simulator.current_month_output OR self.history)
-            # self.simulator.reset(duration)
-            # self.simulator.record()
-            # self.final_output()
-            pass
+            self.run_simulation_button_text_var.set("Run Simulation")
 
     def create_window(self):
         # TODO: think there should be a better way than using the method place(),
@@ -94,24 +105,33 @@ class SimulationInterface:
         self.root.geometry(self.window_size)
 
         # set variables
+        self.simulate_next_month = False # whether to simulate full duration or just next month
         self.duration_var = StringVar()
         self.result_var = StringVar()
         self.info_var = StringVar()
+        self.sim_next_month_box = IntVar()
+        self.run_simulation_button_text_var = StringVar()
+        self.run_simulation_button_text_var.set("Run Simulation")
 
-        # checkoutbox-type of simulating monthly output
-        # if being checked -> self.monthly_output = True
+        # checking and un-checking still activates the function
+        self.sim_next_month_checkbox = Checkbutton(self.root, text="Simulate next month",
+                                                  variable=self.sim_next_month_box,
+                                                  command=self.set_simulate_month)
+        self.sim_next_month_checkbox.grid(row=0, sticky='e')
 
         # input_label - for running whole sim
-        Label(self.root, text="Enter Month Here:")\
-            .place(relx=0.5, rely=0.2, anchor=CENTER)
+        self.duration_input_label = Label(self.root, text="Enter Month Here:")
+        self.duration_input_label.place(relx=0.5, rely=0.2, anchor=CENTER)
 
         # input_box - if monthly-checkbox is checked, the entry does nothing (preferred)
-        Entry(self.root, textvariable=self.duration_var)\
-            .place(relx=0.5, rely=0.25, anchor=CENTER)
+        self.duration_input_entry = Entry(self.root, textvariable=self.duration_var)
+        self.duration_input_entry.place(relx=0.5, rely=0.25, anchor=CENTER)
 
         # button for when user is ready to run the sim
-        Button(self.root, text='Run simulation', command=self.run_sim)\
-            .place(relx=0.5, rely=0.35, anchor=CENTER)
+        self.run_simulation_button = Button(self.root,
+                                            textvariable=self.run_simulation_button_text_var,
+                                            command=self.run_sim)
+        self.run_simulation_button.place(relx=0.5, rely=0.35, anchor=CENTER)
 
         self.root.mainloop()
 
