@@ -1,6 +1,7 @@
 from center import Center
 import csv
 import re
+from pprint import pprint
 
 
 # one_single_center = {
@@ -24,7 +25,7 @@ class Simulator:
         self.center_full_requirements = center_full_requirements
         self.center_type = self.center_full_requirements.keys()
 
-        self.courses = ["Java", "C#", "Data", "DevOps", "Business"]
+        self.courses = self.center_class.waiting_list_dictionary
 
     def calculate_open_centers(self, inp=None):
         if inp is None:
@@ -60,10 +61,12 @@ class Simulator:
                     result[course] += num
         return result
 
-    def calculate_num_of_waiting_list(self):
-        return self.center_class.calculate_num_of_waiting_list()
+    def calculate_num_of_waiting_list(self, inp=None):
+        if inp is None:
+            inp = self.center_class.waiting_list_dictionary
+        return inp
 
-    def calculate_closed_centers(self, inp):
+    def calculate_closed_centers(self, inp=None):
         if inp is None:
             inp = self.center_class.all_centers
         result = dict.fromkeys(self.center_type, 0)
@@ -73,24 +76,43 @@ class Simulator:
         return result
 
     def add_to_history(self):
-        self.current_month_output = self.center_class.update_current_month_output()
         self.history.append(self.current_month_output)
         return self.history
 
-    # Pseudocode
+    def month_simulation(self, open_new_center: bool):
+        if open_new_center:
+            self.center_class.generate_center()
+        each_center_take_in = self.center_class.distribution_sampling_center_in_take()
+        self.center_class.assess_availability(each_center_take_in)
+        self.center_class.push_to_waiting_list({
+            "Java": 4,
+            "C#": 6,
+            "Data": 15,
+            "DevOps": 32,
+            "Business": 9})
+        # to be reviewed after center_class
 
-    # month_simulation():
         # all computations from center_class
-        # self.calculate_open_centers()
-        # self.calculate_full_centers()
-        # self.calculate_num_of_trainees()
-        # self.calculate_num_of_waiting_list()
-        # self.calculate_closed_centers()
-        # self.current_month_output = center_class_output
+        num_open_centers = self.calculate_open_centers()
+        num_full_centers = self.calculate_full_centers()
+        num_of_trainees = self.calculate_num_of_trainees()
+        num_of_waiting_list = self.calculate_num_of_waiting_list()
+        num_closed_centers = self.calculate_closed_centers()
+        self.current_month_output = {"number of open centers": num_open_centers,
+                                     "number of closed centers": num_closed_centers,
+                                     "number of full centers": num_full_centers,
+                                     "number of trainees": num_of_trainees,
+                                     "number of trainees on waiting list": num_of_waiting_list}
+        self.add_to_history()
+        return self.current_month_output
 
-    # duration_simulation():
-        # for month in duration:
-            # month_simulation()
+    def duration_simulation(self, duration):
+        for month in range(duration):
+            open_new_center = False
+            if month + 1 % 2 == 0:
+                open_new_center = True
+            self.month_simulation(open_new_center)
+        return self.history
 
     def export_to_csv(self, file_name="simulation record", extension="csv"):
         if extension == "csv":
@@ -98,12 +120,13 @@ class Simulator:
             with open(f"{file_name}.{extension}", "w", newline="") as file:
 
                 writer = csv.writer(file)
-                writer.writerow(self.record_dict["headers"])
-
-                for data in self.record_dict["data"]:
-                    writer.writerow(data)
+                # writer.writerow(self.history["headers"])
+                #
+                # for data in self.history["data"]:
+                #     writer.writerow(data)
         else:
             return NotImplementedError
+
 
 if __name__ == "__main__":
     all_centers = [
@@ -138,3 +161,12 @@ if __name__ == "__main__":
     print("full", full_centers)
     num_trainees = simulator.calculate_num_of_trainees(all_centers)
     print("trainee", num_trainees)
+    simulator.month_simulation(False)
+    print("no gen month output")
+    pprint(simulator.current_month_output)
+    simulator.month_simulation(True)
+    print("gen month output")
+    pprint(simulator.current_month_output)
+    simulator = Simulator()
+    simulator.duration_simulation(3)
+    pprint(simulator.history)
