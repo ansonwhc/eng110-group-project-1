@@ -83,7 +83,7 @@ class Center():
         # Assessing whether our center can take the sample number of trainees
         for center, num_take_in in zip(self.all_centers, each_center_take_in):
             center_type = center['type']
-            available_num = max_capacity[center_type] - sum(center["trainee"].values()) + num_take_in
+            available_num = max_capacity[center_type] - sum(center["trainee"].values()) - num_take_in
             if available_num > 0:
             # Center is still available
                 self.available_num_lg_0()
@@ -97,7 +97,22 @@ class Center():
         pass
 
     def available_num_eq_0(self):
-        pass
+        # if/else to determine type
+        if center_type == 'tech_center':
+        # tech centers: search for specific course on the waiting list and the monthly generated new list
+            if waiting_list_dictionary[center["course"]] >= num_take_in:
+                center["trainee"][center["course"]] += num_take_in
+                waiting_list_dictionary[center["course"]] -= num_take_in
+            else:
+                center["trainee"][center["course"]] += waiting_list_dictionary[center["course"]]
+                num_take_in -= waiting_list_dictionary[center["course"]]
+                waiting_list_dictionary[center["course"]] = 0
+
+        else:
+
+        # training_hubs or bootcamps: search waiting list and then generated if still not full
+
+
 
     def available_num_ls_0(self):
         pass
