@@ -48,11 +48,11 @@ class Center():
             course = random.choice(["Java", "C#", "Data", "DevOps", "Business"])
             # Creates a new id for the tech center 
             self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {}})
-    
-    def push_to_waiting_list(self):
-        def push_to_waiting_list(self, trainee):
-            for trainee_key in trainee.keys():
-                self.waiting_list_dictionary[trainee_key] += trainee[trainee_key]
+
+
+    def push_to_waiting_list(self, trainee):
+        for trainee_key in trainee.keys():
+            self.waiting_list_dictionary[trainee_key] += trainee[trainee_key]
 
 if __name__ == "__main__":
     example_dict = {
