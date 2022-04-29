@@ -71,13 +71,6 @@ class SimulationInterface:
 
             pretty_text = self.prettify_monthly_output(self.simulator.history[self.current_month], True)
             self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
-
-            # self.forward_button = Button(text="Redirect to next month result",
-            #                              command=self.display_forward_a_month)
-            # self.forward_button.grid(row=3, column=1, sticky=NW)
-            # self.backward_button = Button(text="Redirect to last month result",
-            #                               command=self.display_backward_a_month)
-            # self.backward_button.grid(row=3, column=0, sticky=NW)
         else:
             self.result_var.set("Input is not recognised, please input an integer")
             self.duration_var.set("")
@@ -100,7 +93,6 @@ class SimulationInterface:
 
     def run_sim(self):
         if not self.simulate_next_month:
-            print("reseted")
             self.simulator.reset_history()
         # result_label
         self.result_box = Label(self.root, textvariable=self.result_var, anchor="e", justify=LEFT)
@@ -129,12 +121,6 @@ class SimulationInterface:
             self.run_simulation_button_text_var.set("Simulate Next Month")
             self.duration_var.set("Input here will not will valid")
             self.result_var.set("")
-            # try:
-            #     self.forward_button.destroy()
-            #     self.backward_button.destroy()
-            #     self.result_var.set("")
-            # except AttributeError:
-            #     pass
         else:
             self.run_simulation_button_text_var.set("Run Simulation")
             self.duration_var.set("")
