@@ -3,13 +3,14 @@ import random
 class Center():
     def __init__(self):
         self.all_centers = []
+        self.distribute_trainees_list = []
         self.waiting_list_dictionary = {
-        "Java": 0,
-        "C#": 0,
-        "Data": 0,
-        "DevOps": 0,
-        "Business": 0
-    }
+        "Java": 1,
+        "C#": 2,
+        "Data": 30,
+        "DevOps": 4,
+        "Business": 5
+        }
         self.num_bootcamps = 0
         self.num_open_training_hubs = 0
         self.can_open_training_hub = True
@@ -34,7 +35,8 @@ class Center():
         return random_num
 
     def generate_center(self):
-        random_num = self.centers_available()
+        # random_num = self.centers_available()
+        random_num = 3
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
@@ -47,7 +49,7 @@ class Center():
             # Determines what course the tech center will be teaching
             course = random.choice(["Java", "C#", "Data", "DevOps", "Business"])
             # Creates a new id for the tech center 
-            self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {}})
+            self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {course: 0}})
 
     def push_to_waiting_list(self, trainee):
         for trainee_key in trainee.keys():
@@ -83,7 +85,7 @@ class Center():
         # Assessing whether our center can take the sample number of trainees
         for center, num_take_in in zip(self.all_centers, each_center_take_in):
             center_type = center['type']
-            available_num = max_capacity[center_type] - sum(center["trainee"].values()) + num_take_in
+            available_num = max_capacity[center_type] - sum(center["trainee"].values()) - num_take_in
             if available_num > 0:
             # Center is still available
                 self.available_num_lg_0()
@@ -93,7 +95,38 @@ class Center():
             else:
             # For when sampled number of trainees exceeded the center capacity
                 self.available_num_ls_0()
+
+    def create_distribution_list(self):
+        self.distribute_trainees_list = []
+        # Shuffles the centers list for good measure (shuffle randomises the order of items in the list)
+        random.shuffle(self.all_centers)
+        for center in self.all_centers:
+            self.distribute_trainees_list.append(random.randrange(0, 51))
+
+    def distribute_tech_centers(self):
+        self.create_distribution_list()
+        # Iterating through all_centers
+        for index, center in enumerate(self.all_centers):
+            # How many trainees a center it can take
+            random_trainee = self.distribute_trainees_list[index]
+            print(center)
+            # Iterating through all courses in the waiting list
+            for course in self.waiting_list_dictionary:
+                print(course)
+                # Finding matching courses
+                if course == center['course']:
+                    # Grabbing the number of trainees from the matching course
+                    res = self.waiting_list_dictionary[course]
+                    # If number of trainees in the course is less than 200, keep adding the min number of trainees
+                    if center['trainee'][course] < 200:
+                        # accepting = min([res, (200 - res)])
+                        accepting = min([min([res, (200 - res)]), random_trainee])
+                        center['trainee'][course] += accepting
+                        self.waiting_list_dictionary[course] -= accepting
+
+
     def available_num_lg_0(self):
+
         pass
 
     def available_num_eq_0(self):
@@ -139,5 +172,11 @@ if __name__ == "__main__":
 
     obj = Center()
     obj.generate_center()
-    print(obj.all_centers)
+    obj.all_centers[0]['type'] == 'tech_center'
+    # print(obj.waiting_list_dictionary)
+    print(obj.distribute_tech_centers())
+    center_dict = obj.all_centers[0]
+    wait_dict = obj.waiting_list_dictionary
 
+    # print(center_dict['course'])
+    # print(wait_dict)
