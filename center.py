@@ -1,4 +1,5 @@
 import random
+from trainee import Trainee
 
 class Center():
     def __init__(self):
@@ -62,6 +63,7 @@ class Center():
         #     "DevOps": 6,
         #     "Business": 10 }
         # try a code to assess if the centers are full or not
+        monthly_trainees = Trainee.generate_new_trainees()
         max_capacity = {
             "training_hub": 100,
             "bootcamp": 500,
@@ -107,8 +109,14 @@ class Center():
                 center["trainee"][center["course"]] += waiting_list_dictionary[center["course"]]
                 num_take_in -= waiting_list_dictionary[center["course"]]
                 waiting_list_dictionary[center["course"]] = 0
-
+                if monthly_trainees[center["course"]] >= num_take_in:
+                    center["trainee"][center["course"]] += num_take_in
+                    monthly_trainees[center["course"]] = 0
+                else:
+                    center["trainee"][center["course"]] +=  monthly_trainees[center["course"]]
+                    monthly_trainees[center["course"]] = 0
         else:
+            pass
 
         # training_hubs or bootcamps: search waiting list and then generated if still not full
 
