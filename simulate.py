@@ -11,7 +11,7 @@ class Simulate():
         self.obj_center = Center()
         self.input = input
         self.root = Tk()
-        self.root.geometry("300x625")
+        self.root.geometry("300x600")
         self.e = Entry(self.root, width=5)
         self.strings = []
         self.label = None
@@ -156,4 +156,3 @@ class Simulate():
 
 simulate_obj = Simulate(30)
 simulate_obj.gui_interface()
-simulate_obj.check_output_file_exists()
