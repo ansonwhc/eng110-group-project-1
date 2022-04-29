@@ -27,6 +27,20 @@ class Simulator:
 
         self.courses = self.center_class.waiting_list_dictionary
 
+    def reset_history(self):
+        self.center_class = Center()
+        self.current_month_output = {}
+        self.history = []
+
+    @staticmethod
+    def input_type_check(inp):
+        if isinstance(inp, str):
+            if not inp.isdigit():
+                return TypeError
+        elif isinstance(inp, float):
+            return TypeError
+        return int(inp)
+
     def calculate_open_centers(self, inp=None):
         if inp is None:
             inp = self.center_class.all_centers
@@ -64,8 +78,8 @@ class Simulator:
     def calculate_num_of_waiting_list(self, inp=None):
         if inp is None:
             inp = self.center_class.waiting_list_dictionary
-            out = inp.copy()
-        return out
+        num_of_waiting_list = inp.copy()
+        return num_of_waiting_list
 
     def calculate_closed_centers(self, inp=None):
         if inp is None:
@@ -88,7 +102,6 @@ class Simulator:
             "DevOps": 32,
             "Business": 9})
         # to be reviewed after center_class
-        print(self.center_class.all_centers)
         # all computations from center_class
         num_open_centers = self.calculate_open_centers()
         num_full_centers = self.calculate_full_centers()
@@ -105,6 +118,9 @@ class Simulator:
         self.current_month_output = current_month_output
 
     def duration_simulation(self, duration):
+        duration = self.input_type_check(duration)
+        if duration == TypeError:
+            return
         for month in range(duration):
             open_new_center = False
             if (month + 1) % 2 == 0:
@@ -178,6 +194,6 @@ if __name__ == "__main__":
     # pprint(simulator.current_month_output)
     simulator = Simulator()
     simulator.duration_simulation(5)
-    # pprint(simulator.history)
+    pprint(simulator.history)
 
     simulator.export_to_csv()
