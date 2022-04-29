@@ -11,5 +11,10 @@ class Client:
                       "happy": False}
         self.client_list.append(new_client)
 
+    def update_num_of_trainees(self, client, num):
+        # Add num to client["num_of_clients"]
+        # Assumption: trainee class handles checking that num <= spaces available.
+        client["num_of_clients"] += num
 
-client = Client()
+
+client1 = Client()
