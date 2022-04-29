@@ -28,6 +28,7 @@ class Simulator:
         self.courses = self.center_class.waiting_list_dictionary
 
     def reset_history(self):
+        self.center_class = Center()
         self.current_month_output = {}
         self.history = []
 
