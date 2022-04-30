@@ -91,7 +91,7 @@ class Center():
                     num_return = sum(self.all_centers[idx]["trainee"].values()) - 500
                     self.return_trainees(dictionary_with_trainees, num_return, idx)
                 
-                if distributed_waiting_list == True:
+                if distributed_waiting_list == True and redistribute_from_closed_centers == False:
                     if sum(self.all_centers[idx]["trainee"].values()) < 25:
                         if self.all_centers[idx]["months_less_than_25"] == 2:
                             self.all_centers[idx]["open"] = "no"

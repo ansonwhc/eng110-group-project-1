@@ -11,7 +11,7 @@ class Simulate():
         self.obj_center = Center()
         self.input = input
         self.root = Tk()
-        self.root.geometry("300x600")
+        self.root.geometry("265x600")
         self.root.configure(background='black')
         self.e = None
         self.strings = []
@@ -19,36 +19,34 @@ class Simulate():
         self.top_frame = None
         self.bottom_frame = None
 
-    def run_simulation(self):
-        self.check_output_file_exists()
-        self.start_line_output_file()
-        self.strings = []
+    def run_simulation(self, record_every_month):
         for i in range(1, self.input + 1, 1):
+            if i == 1 and record_every_month == True:
+                self.check_output_file_exists()
+                self.start_line_output_file()
             if i % 2 == 0 or i == 1:
                 self.obj_center.generate_center()
             trainee_generated = self.obj_trainee.generate_new_trainees()
             self.obj_center.create_distribution_list()
             self.obj_center.distribute_trainees(self.obj_center.waiting_list_dictionary)
             self.obj_center.distribute_trainees(trainee_generated, distributed_waiting_list=True)
-        self.strings.append("==MONTH {month}==".format(month=i))
-        self.strings.append("=Open Centers==")
-        for key, value in self.output_centers("open", "yes").items():
-            self.strings.append(str(key) + ": " + str(value))
-        self.strings.append("=Closed Centers=")
-        for key, value in self.output_centers("open", "no").items():
-            self.strings.append(str(key) + ": " + str(value))
-        self.strings.append("=Full Centers=")
-        for key, value in self.output_centers("full", "yes").items():
-            self.strings.append(str(key) + ": " + str(value))
-        self.strings.append("=Working Trainees=")
-        for key, value in self.output_working_trainees(self.obj_center.all_centers).items():
-            self.strings.append(str(key) + ": " + str(value))
-        self.strings.append("=Waiting List=")
-        for key, value in self.obj_center.waiting_list_dictionary.items():
-            self.strings.append(str(key) + ": " + str(value))
+            if record_every_month == True:
+                self.output_to_gui_and_logs(i, True)
+                if self.label != None:
+                    self.label.destroy()
+                self.label = Label(self.bottom_frame, text="\n".join(map(str, self.strings)), fg='white')
+                self.label.configure(background='black')
+                self.label.grid(row=2,column=0)
+                self.root.update()
+                time.sleep(1.3)
+                self.write_to_output_file(self.strings)
+                if i == self.input:
+                    self.end_line_output_file()
 
-        self.write_to_output_file(self.strings)
-        self.end_line_output_file()
+                
+        if record_every_month == False:
+            self.output_to_gui_and_logs(i, False)
+        
 
     def gui_interface(self):
         
@@ -76,7 +74,7 @@ class Simulate():
                     self.label.destroy()
                 self.obj_center = Center()
                 self.input = int(self.e.get())
-                self.run_simulation()
+                self.run_simulation(False)
                 self.label = Label(self.bottom_frame, text="\n".join(map(str, self.strings)), fg='white')
                 self.label.configure(background='black')
                 self.label.grid(row=2,column=0)
@@ -86,41 +84,40 @@ class Simulate():
             if int(self.e.get()) >= 0:
                 self.obj_center = Center()
                 self.input = int(self.e.get())
-                self.check_output_file_exists()
-                self.start_line_output_file()
-                for i in range(1, self.input + 1, 1):
-                    self.strings = []
-                    if i % 2 == 0 or i == 1:
-                        self.obj_center.generate_center()
-                    trainee_generated = self.obj_trainee.generate_new_trainees()
-                    self.obj_center.create_distribution_list()
-                    self.obj_center.distribute_trainees(self.obj_center.waiting_list_dictionary)
-                    self.obj_center.distribute_trainees(trainee_generated, distributed_waiting_list=True)
-                    self.strings.append("==MONTH {month}==".format(month=i))
-                    self.strings.append("=Open Centers==")
-                    for key, value in self.output_centers("open", "yes").items():
-                        self.strings.append(str(key) + ": " + str(value))
-                    self.strings.append("=Closed Centers=")
-                    for key, value in self.output_centers("open", "no").items():
-                        self.strings.append(str(key) + ": " + str(value))
-                    self.strings.append("=Full Centers=")
-                    for key, value in self.output_centers("full", "yes").items():
-                        self.strings.append(str(key) + ": " + str(value))
-                    self.strings.append("=Working Trainees=")
-                    for key, value in self.output_working_trainees(self.obj_center.all_centers).items():
-                        self.strings.append(str(key) + ": " + str(value))
-                    self.strings.append("=Waiting List=")
-                    for key, value in self.obj_center.waiting_list_dictionary.items():
-                        self.strings.append(str(key) + ": " + str(value))
-                    if self.label != None:
-                        self.label.destroy()
-                    self.label = Label(self.bottom_frame, text="\n".join(map(str, self.strings)), fg='white')
-                    self.label.configure(background='black')
-                    self.label.grid(row=2,column=0)
-                    self.root.update()
-                    time.sleep(1.3)
-                    self.write_to_output_file(self.strings)
-                self.end_line_output_file()
+                self.run_simulation(True)
+
+    def output_to_gui_and_logs(self, month_num, every_month):
+        if every_month == False:
+            self.check_output_file_exists()
+            self.start_line_output_file()
+        self.strings = []
+
+        self.strings.append("===========MONTH {month}===========".format(month=month_num))
+        self.strings.append("")
+        self.strings.append("=====Open Centres=====")
+        for key, value in self.output_centers("open", "yes").items():
+            self.strings.append(str(key) + ": " + str(value))
+        self.strings.append("")
+        self.strings.append("=====Closed Centres=====")
+        for key, value in self.output_centers("open", "no").items():
+            self.strings.append(str(key) + ": " + str(value))
+        self.strings.append("")
+        self.strings.append("=====Full Centres=====")
+        for key, value in self.output_centers("full", "yes").items():
+            self.strings.append(str(key) + ": " + str(value))
+        self.strings.append("")
+        self.strings.append("=====Working Trainees=====")
+        for key, value in self.output_working_trainees(self.obj_center.all_centers).items():
+            self.strings.append(str(key) + ": " + str(value))
+        self.strings.append("")
+        self.strings.append("=====Waiting List=====")
+        for key, value in self.obj_center.waiting_list_dictionary.items():
+            self.strings.append(str(key) + ": " + str(value))
+        self.strings.append("")
+
+        if every_month == False:
+            self.write_to_output_file(self.strings)
+            self.end_line_output_file()
 
     def output_centers(self, key, value):
         breakdown = {}
