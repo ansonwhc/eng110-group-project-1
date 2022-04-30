@@ -12,9 +12,12 @@ class Simulate():
         self.input = input
         self.root = Tk()
         self.root.geometry("300x600")
-        self.e = Entry(self.root, width=5)
+        self.root.configure(background='black')
+        self.e = None
         self.strings = []
         self.label = None
+        self.top_frame = None
+        self.bottom_frame = None
 
     def run_simulation(self):
         self.check_output_file_exists()
@@ -48,13 +51,20 @@ class Simulate():
         self.end_line_output_file()
 
     def gui_interface(self):
-        label = Label(self.root, text="Enter a number of months: ")
-        label.grid(row=0, column=0,padx=5)
-        self.e.grid(row=1, column=0, padx=2, sticky="ew")
-        btn = Button(self.root, text="Final output", command=self.click)
-        btn.grid(row=1,column=1,padx=0,pady=0)
+        
+        self.top_frame = Frame(self.root, bg='black', width=10, height=5, pady=3)
+        self.btm_frame = Frame(self.root, width=200, height=200, pady=3)
+        self.top_frame.grid(row=0, sticky="ew")
+        
 
-        btn1 = Button(self.root, text="Output per month", command=self.slow_click)
+        label = Label(self.top_frame, text="Enter a number of months: ")
+        label.grid(row=0, column=0,padx=2)
+        self.e = Entry(self.top_frame, width=5)
+        self.e.grid(row=1, column=0, padx=2, sticky="ew")
+        btn = Button(self.top_frame, text="Final output", command=self.click)
+        btn.grid(row=1,column=1,padx=0,pady=2)
+
+        btn1 = Button(self.top_frame, text="Output per month", command=self.slow_click)
         btn1.grid(row=0,column=1,padx=0,pady=0)
 
         self.root.mainloop()
@@ -67,7 +77,8 @@ class Simulate():
                 self.obj_center = Center()
                 self.input = int(self.e.get())
                 self.run_simulation()
-                self.label = Label(self.root, text="\n".join(map(str, self.strings)))
+                self.label = Label(self.bottom_frame, text="\n".join(map(str, self.strings)), fg='white')
+                self.label.configure(background='black')
                 self.label.grid(row=2,column=0)
 
     def slow_click(self):
@@ -103,7 +114,8 @@ class Simulate():
                         self.strings.append(str(key) + ": " + str(value))
                     if self.label != None:
                         self.label.destroy()
-                    self.label = Label(self.root, text="\n".join(map(str, self.strings)))
+                    self.label = Label(self.bottom_frame, text="\n".join(map(str, self.strings)), fg='white')
+                    self.label.configure(background='black')
                     self.label.grid(row=2,column=0)
                     self.root.update()
                     time.sleep(1.3)
