@@ -25,3 +25,5 @@ class Trainee:
                 self.generated_trainees['DevOps'] += 1
             elif course == 5:
                 self.generated_trainees['Business'] += 1
+        
+        return self.generated_trainees

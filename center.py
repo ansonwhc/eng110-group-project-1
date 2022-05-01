@@ -50,7 +50,7 @@ class Center():
             self.all_centers.append({"type": "tech_center", "open": "yes", "full": "no", "type": "tech_center", "course": course, "trainee": trainee_list})
 
     def update_months_trained(self):
-        for i in range(self.all_centers):
+        for i in range(len(self.all_centers)):
             for key, value in self.all_centers[i]["trainee"][11].items():
                         self.trainee_obj.bench[key] += value
                         self.all_centers[i]["trainee"][11][key] = 0
@@ -77,7 +77,7 @@ class Center():
 
             if center["type"] == "tech_center":
                 center_course = center["course"]
-                new_total = min(dictionary_with_trainees[center_course], num_trainees_to_distribute) + sum([dictonary[center_course] for dictonary in self.all_centers[idx]["trainee"]])
+                new_total = min(dictionary_with_trainees[center_course], num_trainees_to_distribute) + sum([sum(dictonary.values()) for dictonary in self.all_centers[idx]["trainee"]])
                 if new_total >= 200:
                     self.all_centers[idx]["full"] = "yes"
                     difference = new_total - 200
@@ -94,7 +94,7 @@ class Center():
                     self.distribute_trainees_list[idx] = 0
 
                 if distributed_waiting_list == True:
-                    if self.all_centers[idx]["trainee"][center_course] < 25:
+                    if self.all_centers[idx]["trainee"][0][center_course] < 25:
                         self.all_centers[idx]["open"] = "no"
                         self.return_trainees(dictionary_with_trainees, self.all_centers[idx]["trainee"][0][center_course], idx)
 
@@ -139,24 +139,23 @@ class Center():
             self.trainee_obj.waiting_list_dictionary[trainee_key] += trainee_dictionary[trainee_key]
 
     def distribute_random_roles(self, dictionary, center_idx):
-        num_trainees_to_distribute = self.distribute_trainees_list[center_idx]
-        if num_trainees_to_distribute >= sum(dictionary.values()):
+        if self.distribute_trainees_list[center_idx] >= sum(dictionary.values()):
             for role in dictionary.keys():
                 self.all_centers[center_idx]["trainee"][0][role] += dictionary[role]
-                num_trainees_to_distribute -= dictionary[role]
+                self.distribute_trainees_list[center_idx] -= dictionary[role]
                 dictionary[role] = 0 
         else:
-            while num_trainees_to_distribute != 0:
+            while self.distribute_trainees_list[center_idx] != 0:
                 sampled_role = random.choice([key for key in dictionary if dictionary[key] > 0])
                 num_taken = random.randrange(1, dictionary[sampled_role] + 1)
-                if num_taken >= num_trainees_to_distribute:
-                    num_taken = num_trainees_to_distribute
+                if num_taken >= self.distribute_trainees_list[center_idx]:
+                    num_taken = self.distribute_trainees_list[center_idx]
                     self.all_centers[center_idx]["trainee"][0][sampled_role] += num_taken
                     dictionary[sampled_role] -= num_taken
-                    num_trainees_to_distribute = 0
+                    self.distribute_trainees_list[center_idx] = 0
                 else:
                     self.all_centers[center_idx]["trainee"][0][sampled_role] += num_taken
-                    num_trainees_to_distribute -= num_taken
+                    self.distribute_trainees_list[center_idx] -= num_taken
                     dictionary[sampled_role] -= num_taken
 
     def return_trainees(self, dictionary_to_add_trainees, num_trainees, center_idx, closed_bootcamp=False, return_from_month=0):

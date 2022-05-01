@@ -3,14 +3,15 @@ import time
 from tkinter import *
 from trainee import Trainee
 from center import Center
+from client import Client
 
 class Simulate():
 
     def __init__(self):
-        # Creates objects of the trainee and center classes which will be used
+        # Creates objects of the center, and client classes which will be used
         # in order to get the customer's requested output.
-        self.obj_trainee = Trainee()
         self.obj_center = Center()
+        self.obj_client = Client()
         # The input is how many months the simulation will run for.
         self.input = 0
         # Instantiates an object of the Tkinter class. We will use this object
@@ -46,16 +47,24 @@ class Simulate():
             # two months).
             if i % 2 != 0:
                 self.obj_center.generate_center()
+            self.obj_center.update_months_trained()
             # Generates a new random set of trainees for the month.
-            trainee_generated = self.obj_trainee.generate_new_trainees()
+            trainee_generated = self.obj_center.trainee_obj.generate_new_trainees()
             # Generates a list which tracks how many trainees each
             # centre will accept for the month.
             self.obj_center.create_distribution_list()
             # First distributes trainees from the waiting list beacause this has priority.
-            self.obj_center.distribute_trainees(self.obj_center.waiting_list_dictionary)
+            self.obj_center.distribute_trainees(self.obj_center.trainee_obj.waiting_list_dictionary)
             # After distributing from the waiting list, we then distribute from the trainees
             # generated this month.
             self.obj_center.distribute_trainees(trainee_generated, distributed_waiting_list=True)
+
+            # If a year has passed, a new client gets generated
+            if i % 12 == 0:
+                self.obj_client.update_when_requirements_not_met()
+                self.obj_client.update_returning_clients()
+                self.obj_client.generate_client()
+                self.obj_client.update_num_of_trainees(self.obj_center.trainee_obj)
             if record_every_month == True:
                 # If we are recording every month, we will update the GUI interface during
                 # this current iteration.
@@ -152,7 +161,7 @@ class Simulate():
             self.output_strings.append(str(key) + ": " + str(value))
         self.output_strings.append("")
         self.output_strings.append("=====Waiting List=====")
-        for key, value in self.obj_center.waiting_list_dictionary.items():
+        for key, value in self.obj_center.trainee_obj.waiting_list_dictionary.items():
             self.output_strings.append(str(key) + ": " + str(value))
 
         if every_month == False:
@@ -188,8 +197,9 @@ class Simulate():
     def output_working_trainees(self, centre_list):
         dict = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
         for centre in centre_list:
-            for key in centre["trainee"].keys():
-                dict[key] += centre["trainee"][key]
+            for dictionary in centre["trainee"]:
+                for key in dictionary.keys():
+                    dict[key] += dictionary[key]
         return dict
 
     def check_output_file_exists(self):
