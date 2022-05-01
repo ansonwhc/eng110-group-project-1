@@ -30,7 +30,6 @@ class Center():
         return random_num
 
     def generate_center(self):
-
         trainee_list = []
         for i in range(12):
             trainee_list.append({"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0})
@@ -51,7 +50,6 @@ class Center():
             self.all_centers.append({"type": "tech_center", "open": "yes", "full": "no", "type": "tech_center", "course": course, "trainee": trainee_list})
 
     def update_months_trained(self):
-
         for i in range(self.all_centers):
             for key, value in self.all_centers[i]["trainee"][11].items():
                         self.trainee_obj.bench[key] += value

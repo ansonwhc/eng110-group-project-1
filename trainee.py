@@ -7,7 +7,6 @@ class Trainee:
         self.generated_trainees = {}
 
     def generate_new_trainees(self):
-
         # Generates a number between 50-100.
         num = random.randint(50, 100)
         # Creates dictionary for group.
