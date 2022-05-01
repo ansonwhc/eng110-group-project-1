@@ -61,7 +61,7 @@ class Simulate():
 
             # If a year has passed, a new client gets generated
             if i % 12 == 0:
-                self.obj_client.update_when_requirements_not_met()
+                self.obj_client.update_when_requirements_not_met(self.obj_center.trainee_obj)
                 self.obj_client.update_returning_clients()
                 self.obj_client.generate_client()
             if self.obj_client.client_list != []:

@@ -25,11 +25,14 @@ class Client:
                 self.client_list[idx]["num_of_trainees"] += trainee_obj.bench[self.client_list[idx]["requirements"][1]]
                 trainee_obj.bench[self.client_list[idx]["requirements"][1]] = 0
 
-    def update_when_requirements_not_met(self):
+    def update_when_requirements_not_met(self, trainee_obj):
         # Checks if client has required trainees at the end of twelve months, and changes "happy" to False if not.
         for idx in range(len(self.client_list)):
             if self.client_list[idx]["num_of_trainees"] < self.client_list[idx]["requirements"][0]:
                 self.client_list[idx]["happy"] = False
+                # Adds all the trainees back to the bench
+                trainee_obj.bench[self.client_list[idx]["requirements"][1]] += self.client_list[idx]["num_of_trainees"]
+                self.client_list[idx]["num_of_trainees"] = 0 
 
     def update_returning_clients(self):
         for idx in range(len(self.client_list)):
