@@ -236,7 +236,6 @@ class Simulate():
                 dic[key] += dictionary[key]
         return dic
 
-
     def check_output_file_exists(self):
         '''
         If the file does not exist in the present working directory,

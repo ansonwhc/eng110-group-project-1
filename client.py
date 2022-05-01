@@ -38,6 +38,3 @@ class Client:
         for idx in range(len(self.client_list)):
             if self.client_list[idx]["happy"] == True:
                 self.client_list[idx]["num_of_trainees"] = 0
-
-
-
