@@ -64,6 +64,7 @@ class Simulate():
                 self.obj_client.update_when_requirements_not_met()
                 self.obj_client.update_returning_clients()
                 self.obj_client.generate_client()
+            if self.obj_client.client_list != []:
                 self.obj_client.update_num_of_trainees(self.obj_center.trainee_obj)
             if record_every_month == True:
                 # If we are recording every month, we will update the GUI interface during
@@ -147,22 +148,31 @@ class Simulate():
         self.output_strings.append("=====Open Centres=====")
         for key, value in self.output_centers("open", "yes").items():
             self.output_strings.append(str(key) + ": " + str(value))
-        self.output_strings.append("")
-        self.output_strings.append("=====Closed Centres=====")
+        self.output_strings.append("\n=====Closed Centres=====")
         for key, value in self.output_centers("open", "no").items():
             self.output_strings.append(str(key) + ": " + str(value))
-        self.output_strings.append("")
-        self.output_strings.append("=====Full Centres=====")
+        self.output_strings.append("\n=====Full Centres=====")
         for key, value in self.output_centers("full", "yes").items():
             self.output_strings.append(str(key) + ": " + str(value))
-        self.output_strings.append("")
-        self.output_strings.append("=====Working Trainees=====")
+        self.output_strings.append("\n=====Working Trainees=====")
         for key, value in self.output_working_trainees(self.obj_center.all_centers).items():
             self.output_strings.append(str(key) + ": " + str(value))
-        self.output_strings.append("")
-        self.output_strings.append("=====Waiting List=====")
+        self.output_strings.append("\n=====Waiting List=====")
         for key, value in self.obj_center.trainee_obj.waiting_list_dictionary.items():
             self.output_strings.append(str(key) + ": " + str(value))
+        
+        if self.obj_center.trainee_obj.bench != []:
+            self.output_strings.append("\n=====Trainees on the Bench=====")
+            for key, value in self.obj_center.trainee_obj.bench.items():
+                self.output_strings.append(str(key) + ": " + str(value))
+
+        if self.obj_client.client_list != []:
+            self.output_strings.append("\n=====Happy Clients=====")
+            for key, value in self.output_client_information()[0].items():
+                self.output_strings.append(str(key) + ": " + str(value))
+            self.output_strings.append("\n=====Sad Clients=====")
+            for key, value in self.output_client_information()[1].items():
+                self.output_strings.append(str(key) + ": " + str(value))
 
         if every_month == False:
             self.write_to_output_file(self.output_strings)
@@ -195,12 +205,29 @@ class Simulate():
         return breakdown
 
     def output_working_trainees(self, centre_list):
-        dict = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+        dic = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
         for centre in centre_list:
             for dictionary in centre["trainee"]:
                 for key in dictionary.keys():
-                    dict[key] += dictionary[key]
-        return dict
+                    dic[key] += dictionary[key]
+        return dic
+
+    def output_client_information(self):
+        dict_happy = {}
+        dict_sad = {}
+        for client in self.obj_client.client_list:
+            if client["happy"] == True:
+                if client["requirements"][1] not in dict_happy:
+                    dict_happy[client["requirements"][1]] = 1
+                else:
+                    dict_happy[client["requirements"][1]] += 1
+            else:
+                if client["requirements"][1] not in dict_sad:
+                    dict_sad[client["requirements"][1]] = 1
+                else:
+                    dict_sad[client["requirements"][1]] += 1
+        return [dict_happy, dict_sad]
+                
 
     def check_output_file_exists(self):
         '''
