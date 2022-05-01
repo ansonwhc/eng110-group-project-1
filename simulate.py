@@ -1,7 +1,5 @@
-import random
 import time
 from tkinter import *
-from trainee import Trainee
 from center import Center
 from client import Client
 
