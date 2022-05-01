@@ -1,30 +1,28 @@
 import random
 class Trainee:
+
     def __init__(self):
-        pass
-    # generate method for trainee class to calculate random number between 50-100 to decide how many trainees
+        self.waiting_list_dictionary = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+        self.bench = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+        self.generated_trainees = {}
+
     def generate_new_trainees(self):
-        # generate number between 50-100
+
+        # Generates a number between 50-100.
         num = random.randint(50, 100)
-        # create dictionary for group
-        dict = {
-            "Java": 0,
-            "C#": 0,
-            "Data": 0,
-            "DevOps": 0,
-            "Business": 0
-        }
-        # random assignment of students to courses
-        for trainee in range(num):
+        # Creates dictionary for group.
+        self.generated_trainees = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+
+        # Randomly assigns students to courses.
+        for i in range(num):
             course = random.randint(1, 5)
             if course == 1:
-                dict['Java'] += 1
+                self.generated_trainees['Java'] += 1
             elif course == 2:
-                dict['C#'] += 1
+                self.generated_trainees['C#'] += 1
             elif course == 3:
-                dict['Data'] += 1
+                self.generated_trainees['Data'] += 1
             elif course == 4:
-                dict['DevOps'] += 1
+                self.generated_trainees['DevOps'] += 1
             elif course == 5:
-                dict['Business'] += 1
-        return dict
+                self.generated_trainees['Business'] += 1
