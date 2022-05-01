@@ -1,4 +1,4 @@
-from os import get_handle_inheritable
+from multiprocessing.connection import wait
 import random
 from trainee import Trainee
 
@@ -74,9 +74,8 @@ class Center():
         for course in self.all_centers:
             self.distribute_trainees_list.append(random.randrange(0, 51))
 
-    def distribute_trainees(self, dictionary_with_trainees, distributed_waiting_list=False, redistribute_from_closed_centers=False):
+    def distribute_trainees(self, dictionary_with_trainees, distributed_waiting_list=False, redistribute_from_closed_centers=False, waiting_list_index=0):
         # The waiting list has priority. We must try and distribute trainees from this list first.
-
         for idx, center in enumerate(self.all_centers):
 
             if center["open"] == "no" or center["full"] == "yes":
@@ -90,15 +89,15 @@ class Center():
                 if new_total >= 200:
                     self.all_centers[idx]["full"] = "yes"
                     difference = new_total - 200
-                    self.all_centers[idx]["trainee"][0][center_course] += difference
+                    self.all_centers[idx]["trainee"][waiting_list_index][center_course] += difference
                     dictionary_with_trainees[center_course] -= difference
                     self.distribute_trainees_list[idx] -= difference
                 elif num_trainees_to_distribute >= dictionary_with_trainees[center_course]:
-                        self.all_centers[idx]["trainee"][0][center_course] += dictionary_with_trainees[center_course]
+                        self.all_centers[idx]["trainee"][waiting_list_index][center_course] += dictionary_with_trainees[center_course]
                         self.distribute_trainees_list[idx] -= dictionary_with_trainees[center_course]
                         dictionary_with_trainees[center_course] = 0
                 elif num_trainees_to_distribute < dictionary_with_trainees[center_course]:
-                    self.all_centers[idx]["trainee"][0][center_course] += num_trainees_to_distribute
+                    self.all_centers[idx]["trainee"][waiting_list_index][center_course] += num_trainees_to_distribute
                     dictionary_with_trainees[center_course] -= num_trainees_to_distribute
                     self.distribute_trainees_list[idx] = 0
 
@@ -106,12 +105,12 @@ class Center():
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
             elif center["type"] == "bootcamp":
-                self.distribute_random_roles(dictionary_with_trainees, idx)
+                self.distribute_random_roles(dictionary_with_trainees, idx, waiting_list_index)
                 total_sum = sum([sum(dictonary.values()) for dictonary in self.all_centers[idx]["trainee"]])
                 if total_sum >= 500:
                     self.all_centers[idx]["full"] = "yes"
                     num_return = total_sum - 500
-                    self.return_trainees(dictionary_with_trainees, num_return, idx)
+                    self.return_trainees(dictionary_with_trainees, num_return, idx, distributed_waiting_list)
                 else:
                     self.all_centers[idx]["full"] = "no"
 
@@ -119,18 +118,23 @@ class Center():
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
             elif center["type"] == "training_hub":
-                self.distribute_random_roles(dictionary_with_trainees, idx)
+                self.distribute_random_roles(dictionary_with_trainees, idx, waiting_list_index)
                 total_sum = sum([sum(dictonary.values()) for dictonary in self.all_centers[idx]["trainee"]])
                 if total_sum >= 100:
                     self.all_centers[idx]["full"] = "yes"
                     num_return = total_sum - 100
-                    self.return_trainees(dictionary_with_trainees, num_return, idx)
+                    self.return_trainees(dictionary_with_trainees, num_return, idx, distributed_waiting_list)
                 else:
                     self.all_centers[idx]["full"] = "no"
 
                 if distributed_waiting_list == True:
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
+        if distributed_waiting_list == False:
+            if waiting_list_index == 11:
+                return
+            else:
+                self.distribute_trainees(self.trainee_obj.waiting_list[waiting_list_index+1], False, False, waiting_list_index + 1)
         if distributed_waiting_list == True and redistribute_from_closed_centers == False:
             self.distribute_trainees(dictionary_with_trainees, True, True)
         elif distributed_waiting_list == True and redistribute_from_closed_centers == True:
@@ -167,12 +171,12 @@ class Center():
 
     def push_to_waiting_list(self, trainee_dictionary):
         for trainee_key in trainee_dictionary.keys():
-            self.trainee_obj.waiting_list_dictionary[trainee_key] += trainee_dictionary[trainee_key]
+            self.trainee_obj.waiting_list[0][trainee_key] += trainee_dictionary[trainee_key]
 
-    def distribute_random_roles(self, dictionary, center_idx):
+    def distribute_random_roles(self, dictionary, center_idx, waiting_list_index):
         if self.distribute_trainees_list[center_idx] >= sum(dictionary.values()):
             for role in dictionary.keys():
-                self.all_centers[center_idx]["trainee"][0][role] += dictionary[role]
+                self.all_centers[center_idx]["trainee"][waiting_list_index][role] += dictionary[role]
                 self.distribute_trainees_list[center_idx] -= dictionary[role]
                 dictionary[role] = 0 
         else:
@@ -181,24 +185,17 @@ class Center():
                 num_taken = random.randrange(1, dictionary[sampled_role] + 1)
                 if num_taken >= self.distribute_trainees_list[center_idx]:
                     num_taken = self.distribute_trainees_list[center_idx]
-                    self.all_centers[center_idx]["trainee"][0][sampled_role] += num_taken
+                    self.all_centers[center_idx]["trainee"][waiting_list_index][sampled_role] += num_taken
                     dictionary[sampled_role] -= num_taken
                     self.distribute_trainees_list[center_idx] = 0
                 else:
-                    self.all_centers[center_idx]["trainee"][0][sampled_role] += num_taken
+                    self.all_centers[center_idx]["trainee"][waiting_list_index][sampled_role] += num_taken
                     self.distribute_trainees_list[center_idx] -= num_taken
                     dictionary[sampled_role] -= num_taken
 
-    def return_trainees(self, dictionary_to_add_trainees, num_trainees, center_idx, return_from_month=0):
-        if num_trainees < 0:
-            try:
-                a = 1 + "s"
-            except:
-                print(num_trainees)
-                print(self.all_centers[center_idx]["trainee"])
-                print(self.all_centers[center_idx])
-                print("month:" + str(return_from_month))
-                raise
+    def return_trainees(self, dictionary_to_add_trainees, num_trainees, center_idx, return_from_month=0, distributed_waiting_list=True):
+        if distributed_waiting_list == False:
+            dictionary_to_add_trainees = self.trainee_obj.waiting_list[return_from_month]
         repeat_function = False
         while num_trainees != 0:
             keys_left = [key for key in self.all_centers[center_idx]["trainee"][return_from_month] if self.all_centers[center_idx]["trainee"][return_from_month][key] > 0]
@@ -217,7 +214,20 @@ class Center():
                 self.all_centers[center_idx]["trainee"][return_from_month][sampled] -= num_moved
                 dictionary_to_add_trainees[sampled] += num_moved     
         if repeat_function == True:
-            self.return_trainees(dictionary_to_add_trainees, num_trainees, center_idx, return_from_month + 1)
+            self.return_trainees(dictionary_to_add_trainees, num_trainees, center_idx, return_from_month + 1, distributed_waiting_list)
+            
+    def move_trainees_from_closed_center(self, center_idx):
+        total_trainees = sum([sum(dictonary.values()) for dictonary in self.all_centers[center_idx]["trainee"]])
+        for center in random.sample(self.all_centers,len(self.all_centers)):
+            if total_trainees == 0:
+                break
+            if center["open"] == "no" or center["full"] == "yes":
+                continue
+            if center["type"] == "tech_center":
+                can_add = 200 - total_trainees
+                add_num = min(can_add, )
+                for trainee_dictionary in self.all_centers["trainee"][center_idx]:
+                    pass
 
 if __name__ == "__main__":
     example_dict = {

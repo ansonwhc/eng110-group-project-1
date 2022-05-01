@@ -2,7 +2,9 @@ import random
 class Trainee:
 
     def __init__(self):
-        self.waiting_list_dictionary = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+        self.waiting_list= []
+        for i in range(12):
+            self.waiting_list.append({"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0})
         self.bench = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
         self.generated_trainees = {}
 

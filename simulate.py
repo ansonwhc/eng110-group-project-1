@@ -47,18 +47,17 @@ class Simulate():
             # two months).
             if i % 2 != 0:
                 self.obj_center.generate_center()
-            self.obj_center.update_months_trained()
             # Generates a new random set of trainees for the month.
             trainee_generated = self.obj_center.trainee_obj.generate_new_trainees()
             # Generates a list which tracks how many trainees each
             # centre will accept for the month.
             self.obj_center.create_distribution_list()
             # First distributes trainees from the waiting list beacause this has priority.
-            self.obj_center.distribute_trainees(self.obj_center.trainee_obj.waiting_list_dictionary)
+            self.obj_center.distribute_trainees(self.obj_center.trainee_obj.waiting_list[0])
             # After distributing from the waiting list, we then distribute from the trainees
             # generated this month.
             self.obj_center.distribute_trainees(trainee_generated, distributed_waiting_list=True)
-
+            self.obj_center.update_months_trained()
             # If a year has passed, a new client gets generated
             if i % 12 == 0:
                 self.obj_client.update_when_requirements_not_met(self.obj_center.trainee_obj)
@@ -123,6 +122,7 @@ class Simulate():
                 if self.output_text_gui != None:
                     self.output_text_gui.destroy()
                 self.obj_center = Center()
+                self.obj_client = Client()
                 self.input = int(self.input_box.get())
                 self.run_simulation()
                 self.output_text_gui = Label(self.bottom_frame, text="\n".join(map(str, self.output_strings)), fg='white')
@@ -133,6 +133,7 @@ class Simulate():
         if self.input_box.get().isdigit():
             if int(self.input_box.get()) > 0:
                 self.obj_center = Center()
+                self.obj_client = Client()
                 self.input = int(self.input_box.get())
                 self.run_simulation(record_every_month=True)
 
@@ -158,7 +159,7 @@ class Simulate():
         for key, value in self.output_working_trainees(self.obj_center.all_centers).items():
             self.output_strings.append(str(key) + ": " + str(value))
         self.output_strings.append("\n=====Waiting List=====")
-        for key, value in self.obj_center.trainee_obj.waiting_list_dictionary.items():
+        for key, value in self.output_waiting_list().items():
             self.output_strings.append(str(key) + ": " + str(value))
         
         if self.obj_center.trainee_obj.bench != []:
@@ -228,6 +229,13 @@ class Simulate():
                     dict_sad[client["requirements"][1]] += 1
         return [dict_happy, dict_sad]
                 
+    def output_waiting_list(self):
+        dic = {"Java": 0, "C#": 0, "Data": 0, "DevOps": 0, "Business": 0}
+        for dictionary in self.obj_center.trainee_obj.waiting_list:
+            for key in dictionary.keys():
+                dic[key] += dictionary[key]
+        return dic
+
 
     def check_output_file_exists(self):
         '''
