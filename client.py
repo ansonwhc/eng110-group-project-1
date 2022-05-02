@@ -15,12 +15,16 @@ class Client:
         for idx in range(len(self.client_list)):
             if self.client_list[idx]["happy"] == False:
                 continue
+            if self.client_list[idx]["num_of_trainees"] ==  self.client_list[idx]["requirements"][0]:
+                continue
             # Generates a random number of trainees they will take for the month
             random_number = random.randint(1, self.client_list[idx]["requirements"][0])
+            spaces_left = self.client_list[idx]["requirements"][0] - self.client_list[idx]["num_of_trainees"]
+            take_trainee_num = min(spaces_left, random_number)
 
-            if trainee_obj.bench[self.client_list[idx]["requirements"][1]] >= random_number:
-                self.client_list[idx]["num_of_trainees"] += random_number
-                trainee_obj.bench[self.client_list[idx]["requirements"][1]] -= random_number
+            if trainee_obj.bench[self.client_list[idx]["requirements"][1]] >= take_trainee_num:
+                self.client_list[idx]["num_of_trainees"] += take_trainee_num
+                trainee_obj.bench[self.client_list[idx]["requirements"][1]] -= take_trainee_num
             else:
                 self.client_list[idx]["num_of_trainees"] += trainee_obj.bench[self.client_list[idx]["requirements"][1]]
                 trainee_obj.bench[self.client_list[idx]["requirements"][1]] = 0
