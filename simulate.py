@@ -36,14 +36,14 @@ class Simulate():
         self.bottom_frame = None
 
     def run_simulation(self, record_every_month=False):
-        for i in range(1, self.input + 1, 1):
-            if i == 1 and record_every_month == True:
+        for i in range(0, self.input + 1, 1):
+            if i == 0 and record_every_month == True:
                 self.check_output_file_exists()
                 self.start_line_output_file()
-            # Because i starts at 1, every time i is odd, we want
-            # to open a new training centre (one gets opened every
-            # two months).
-            if i % 2 != 0:
+            self.obj_center.update_months_trained()
+            # A random new training centre gets opened every
+            # two months.
+            if i % 2 == 0:
                 self.obj_center.generate_center()
             # Generates a new random set of trainees for the month.
             trainee_generated = self.obj_center.trainee_obj.generate_new_trainees()
@@ -55,9 +55,8 @@ class Simulate():
             # After distributing from the waiting list, we then distribute from the trainees
             # generated this month.
             self.obj_center.distribute_trainees(trainee_generated, distributed_waiting_list=True)
-            self.obj_center.update_months_trained()
             # If a year has passed, a new client gets generated
-            if i % 12 == 0:
+            if i % 12 == 0 and i != 0:
                 self.obj_client.update_when_requirements_not_met(self.obj_center.trainee_obj)
                 self.obj_client.update_returning_clients()
                 self.obj_client.generate_client()
@@ -115,8 +114,8 @@ class Simulate():
         # In the input box we have created, the user can actually type whatever they want.
         # If it is not a valid number, it will just be ignored.
         if self.input_box.get().isdigit():
-            # If the month entered is 0, the input will also be ignored.
-            if int(self.input_box.get()) > 0:
+            # If the month entered is less than 0, the input will also be ignored.
+            if int(self.input_box.get()) >= 0:
                 if self.output_text_gui != None:
                     self.output_text_gui.destroy()
                 self.obj_center = Center()
@@ -129,7 +128,7 @@ class Simulate():
 
     def month_by_month_breakdown(self):
         if self.input_box.get().isdigit():
-            if int(self.input_box.get()) > 0:
+            if int(self.input_box.get()) >= 0:
                 self.obj_center = Center()
                 self.obj_client = Client()
                 self.input = int(self.input_box.get())
