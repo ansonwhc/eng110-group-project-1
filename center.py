@@ -76,10 +76,8 @@ class Center():
     def distribute_trainees(self, dictionary_with_trainees, distributed_waiting_list=False, redistribute_from_closed_centers=False, waiting_list_index=0):
         # The waiting list has priority. We must try and distribute trainees from this list first.
         for idx, center in enumerate(self.all_centers):
-
             if center["open"] == "no" or center["full"] == "yes":
                 continue
-
             num_trainees_to_distribute = self.distribute_trainees_list[idx]
 
             if center["type"] == "tech_center":
@@ -99,8 +97,7 @@ class Center():
                     self.all_centers[idx]["trainee"][waiting_list_index][center_course] += num_trainees_to_distribute
                     dictionary_with_trainees[center_course] -= num_trainees_to_distribute
                     self.distribute_trainees_list[idx] = 0
-
-                if distributed_waiting_list == True:
+                if distributed_waiting_list == True and redistribute_from_closed_centers == False:
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
             elif center["type"] == "bootcamp":
@@ -110,9 +107,6 @@ class Center():
                     self.all_centers[idx]["full"] = "yes"
                     num_return = total_sum - 500
                     self.return_trainees(dictionary_with_trainees, num_return, idx, distributed_waiting_list)
-                else:
-                    self.all_centers[idx]["full"] = "no"
-
                 if distributed_waiting_list == True and redistribute_from_closed_centers == False:
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
@@ -123,10 +117,7 @@ class Center():
                     self.all_centers[idx]["full"] = "yes"
                     num_return = total_sum - 100
                     self.return_trainees(dictionary_with_trainees, num_return, idx, distributed_waiting_list)
-                else:
-                    self.all_centers[idx]["full"] = "no"
-
-                if distributed_waiting_list == True:
+                if distributed_waiting_list == True and redistribute_from_closed_centers == False:
                     self.update_center_closed_and_full(dictionary_with_trainees, idx)
 
         if distributed_waiting_list == False:
