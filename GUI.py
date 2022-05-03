@@ -37,7 +37,7 @@ class SimulationInterface:
     def display_export_button(self):
         # bring up a pop-up window to confirm export
         self.export_button = Button(self.root, text='Export to csv', command=self.export_popup)
-        self.export_button.grid(row=4, column=0, sticky=NW, columnspan=2)
+        self.export_button.grid(row=7, column=0, sticky=NW, columnspan=2)
 
     def display_next_month_output(self):
         self.display_export_button()
@@ -45,6 +45,13 @@ class SimulationInterface:
         # prettify
         pretty_text = self.prettify_monthly_output(self.monthly_result, True)
         self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
+
+    def display_final_month_output(self):
+        self.display_export_button()
+        self.monthly_result = self.simulator.history[-1]
+        # prettify
+        pretty_text = self.prettify_monthly_output(self.monthly_result, True)
+        self.result_var.set(f"Current month: {int(self.full_duration)}\n{pretty_text}")
 
     def prettify_monthly_output(self, result_dict, top=False):
         if not isinstance(result_dict, dict):
@@ -94,7 +101,7 @@ class SimulationInterface:
             self.simulator.reset_history()
         # result_label
         self.result_box = Label(self.root, textvariable=self.result_var, anchor="e", justify=LEFT)
-        self.result_box.grid(row=0, column=2, sticky=NW, rowspan=10)
+        self.result_box.grid(row=0, column=3, sticky=NW, rowspan=10)
 
         # get user input
         if self.simulate_next_month:
@@ -104,9 +111,9 @@ class SimulationInterface:
             self.current_month += 1
 
         else:
-            duration = self.duration_var.get()
+            self.full_duration = self.duration_var.get()
             self.duration_var.set("")
-            self.simulator.duration_simulation(duration)
+            self.simulator.duration_simulation(self.full_duration)
             self.display_all_output()
 
     def set_simulate_month(self):
@@ -117,7 +124,7 @@ class SimulationInterface:
         if self.simulate_next_month:
             self.run_simulation_button_text_var.set("Simulate Next Month")
             self.duration_var.set("Input here will not will valid")
-            self.result_var.set("")
+            self.result_var.set("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         else:
             self.run_simulation_button_text_var.set("Run Simulation")
             self.duration_var.set("")
@@ -140,6 +147,7 @@ class SimulationInterface:
         self.simulate_next_month = False  # whether to simulate full duration or just next month
         self.duration_var = StringVar()
         self.result_var = StringVar()
+        self.result_var.set("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         self.info_var = StringVar()
         self.sim_next_month_box = IntVar()
         self.run_simulation_button_text_var = StringVar()
@@ -158,13 +166,16 @@ class SimulationInterface:
         # input_box - if monthly-checkbox is checked, the entry does nothing (preferred)
         self.duration_input_entry = Entry(self.root, textvariable=self.duration_var, width=30)
         self.duration_input_entry.grid(row=1, column=0, sticky=NW, columnspan=2)
-
-        self.forward_button = Button(text="Redirect to next month result",
-                                     command=self.display_forward_a_month)
-        self.forward_button.grid(row=3, column=1, sticky=NW)
-        self.backward_button = Button(text="Redirect to last month result",
+        self.backward_button = Button(text="Redirect to the last month result",
                                       command=self.display_backward_a_month)
         self.backward_button.grid(row=3, column=0, sticky=NW)
+        self.forward_button = Button(text="Redirect to the next month result",
+                                     command=self.display_forward_a_month)
+        self.forward_button.grid(row=4, column=0, sticky=NW)
+        self.final_month_button = Button(text="Redirect to the final month result",
+                                         command=self.display_final_month_output)
+        self.final_month_button.grid(row=5, column=0, sticky=NW)
+
 
         # button for when user is ready to run the sim
         self.run_simulation_button = Button(self.root,
