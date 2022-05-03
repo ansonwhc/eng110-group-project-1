@@ -93,14 +93,9 @@ class Simulator:
     def month_simulation(self, open_new_center: bool):
         if open_new_center:
             self.center_class.generate_center()
-        each_center_take_in = self.center_class.distribution_sampling_center_in_take()
-        self.center_class.assess_availability(each_center_take_in)
-        self.center_class.push_to_waiting_list({
-            "Java": 4,
-            "C#": 6,
-            "Data": 15,
-            "DevOps": 32,
-            "Business": 9})
+        #each_center_take_in = self.center_class.distribution_sampling_center_in_take()
+        self.center_class.distribute()
+        #self.center_class.assess_availability(each_center_take_in)
         # to be reviewed after center_class
         # all computations from center_class
         num_open_centers = self.calculate_open_centers()
