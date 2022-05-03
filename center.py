@@ -7,11 +7,11 @@ class Center():
         self.all_centers = []
         self.distribute_trainees_list = []
         self.waiting_list_dictionary = {
-            "Java": 5,
-            "C#": 13,
-            "Data": 16,
-            "DevOps": 12,
-            "Business": 11
+            "Java": 53,
+            "C#": 123,
+            "Data": 161,
+            "DevOps": 125,
+            "Business": 166
         }
         self.max_capacity = {
             "training_hub": 100,
@@ -42,10 +42,11 @@ class Center():
 
     def generate_center(self):
         # random_num = self.centers_available()
-        random_num = 3
+        random_num = self.centers_available()
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
+            self.num_open_training_hubs += 1
             self.all_centers.append({"open": "yes", "full": "no", "type": "training_hub", "trainee": {
                 "Java": 0,
                 "C#": 0,
@@ -55,6 +56,7 @@ class Center():
             }})
         # Bootcamp
         elif random_num == 2:
+            self.num_bootcamps += 1
             self.all_centers.append({"open": "yes", "full": "no", "months_below_25": 0, "type": "bootcamp", "trainee": 
                                                                                     {"Java": 0,
                                                                                     "C#": 0,
@@ -81,8 +83,10 @@ class Center():
                 centers["full"] = "yes"
             elif centers["type"] == "tech_center" and sum(centers["trainee"].values()) == 200:
                 centers["full"] = "yes"
+
             if centers["type"] == "training_hubs" and sum(centers["trainee"].values()) < 25:
                 centers["open"] = "no"
+                self.num_open_training_hubs -= 1
             elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) < 25:
                 centers["months_below_25"] += 1
                 if centers["months_below_25"] == 4:
@@ -192,18 +196,15 @@ if __name__ == "__main__":
     }
 
     obj = Center()
-    for _ in range(3):
+    for _ in range(30):
         obj.generate_center()
-
-        print("waiting list:", obj.waiting_list_dictionary)
-        print("all centers:", obj.all_centers)
         obj.distribute()
         print(obj.distribute_trainees_list)
         print("waiting list:", obj.waiting_list_dictionary)
-        print("all centers:", obj.all_centers)
 
     obj.close_center()
-
+    print("")
+    print("all centers:", obj.all_centers)
     # print(obj.distribute_training_hub())
     # center_dict = obj.all_centers[0]
     # wait_dict = obj.waiting_list_dictionary
