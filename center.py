@@ -42,7 +42,7 @@ class Center():
 
     def generate_center(self):
         # random_num = self.centers_available()
-        random_num = 1
+        random_num = 2
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
@@ -104,9 +104,8 @@ class Center():
             center_course = center['course']
             res = self.waiting_list_dictionary[center_course]
             want_to_accepting = random_trainee
-            can_take_in = self.max_capacity['tech_center'] - res
+            can_take_in = self.max_capacity['tech_center'] - sum(center['trainee'].values())
             accepting = min([can_take_in, want_to_accepting])  # does it go over the max (max: )
-
             center['trainee'][center_course] += accepting
             self.waiting_list_dictionary[center_course] -= accepting
 
@@ -147,7 +146,11 @@ class Center():
         center = self.all_centers[index]
         if sum(center['trainee'].values()) < self.max_capacity['bootcamp']:
             res = sum(self.waiting_list_dictionary.values())
-            accepting = min([min([res, (self.max_capacity['bootcamp'] - res)]), random_trainee])
+            want_to_accepting = random_trainee
+            can_take_in = self.max_capacity['bootcamp'] - sum(center['trainee'].values())
+
+            accepting = min([can_take_in, want_to_accepting])   # does it go over the max (max: )
+            print("training_hub accepting", accepting)   # good
             for trainee in range(accepting):
                 choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
                 sampled_course = random.choice(choose_from)
