@@ -42,11 +42,11 @@ class Center():
 
     def generate_center(self):
         # random_num = self.centers_available()
-        random_num = 2
+        random_num = self.centers_available()
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
-            self.all_centers.append({"open": "yes", "type": "training_hub", "trainee": {
+            self.all_centers.append({"open": "yes", "full": "no", "type": "training_hub", "trainee": {
                 "Java": 0,
                 "C#": 0,
                 "Data": 0,
@@ -55,7 +55,8 @@ class Center():
             }})
         # Bootcamp
         elif random_num == 2:
-            self.all_centers.append({"open": "yes", "type": "bootcamp", "trainee": {"Java": 0,
+            self.all_centers.append({"open": "yes", "full": "no", "months_below_25": 0, "type": "bootcamp", "trainee": 
+                                                                                    {"Java": 0,
                                                                                     "C#": 0,
                                                                                     "Data": 0,
                                                                                     "DevOps": 0,
@@ -66,7 +67,7 @@ class Center():
             # Determines what course the tech center will be teaching
             course = random.choice(["Java", "C#", "Data", "DevOps", "Business"])
             # Creates a new id for the tech center 
-            self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {course: 0}})
+            self.all_centers.append({"open": "yes", "full": "no", "type": "tech_center", "course": course, "trainee": {course: 0}})
 
     def push_to_waiting_list(self, trainee):
         for trainee_key in trainee.keys():
@@ -197,6 +198,7 @@ if __name__ == "__main__":
     print("waiting list:", obj.waiting_list_dictionary)
     print("all centers:", obj.all_centers)
 
+    obj.close_center()
 
     # print(obj.distribute_training_hub())
     # center_dict = obj.all_centers[0]
