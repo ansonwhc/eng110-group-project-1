@@ -1,4 +1,6 @@
 import random
+
+
 class Client:
     def __init__(self):
         self.client_list = []
@@ -20,11 +22,3 @@ class Client:
         # Checks if client has required trainees at the end of twelve months, and changes "happy" to False if not.
         if client["num_of_trainees"] < client["requirements"][0]:
             client["happy"] = False
-
-
-#client1 = Client()
-#for i in range(5):
-    #client1.generate_client()
-    #client1.update_num_of_trainees(client1.client_list[i], 20)
-    #client1.update_when_requirements_not_met(client1.client_list[i])
-    #print(client1.client_list[i])
