@@ -1,4 +1,5 @@
 from center import Center
+from trainee import Trainee
 import csv
 import re
 from pprint import pprint
@@ -18,6 +19,7 @@ class Simulator:
         self.current_month_output = {}
         self.history = []
         self.center_class = Center()
+        self.trainee_class = Trainee()
 
         if center_full_requirements is None:
             center_full_requirements = {"training_hub": 100, "bootcamp": 500, "tech_center": 200}
@@ -90,9 +92,12 @@ class Simulator:
                 result[center['type']] += 1
         return result
 
-    def month_simulation(self, open_new_center: bool):
-        if open_new_center:
-            self.center_class.generate_center()
+    def month_simulation(self, open_new_center: bool, second_dist=False):
+        if not second_dist:
+            if open_new_center:
+                self.center_class.generate_center()
+            self.center_class.create_distribution_list()
+
         self.center_class.distribute()
         self.center_class.close_center()
         # to be reviewed after center_class
@@ -111,19 +116,24 @@ class Simulator:
         self.history.append(current_month_output)
         self.current_month_output = current_month_output
 
+        if not second_dist:
+            new_trainees = self.trainee_class.generate_new_trainees()
+            self.center_class.push_to_waiting_list(new_trainees)
+            self.month_simulation(False, True)
+
     def duration_simulation(self, duration):
         duration = self.input_type_check(duration)
         if duration == TypeError:
             return
         for month in range(duration):
             open_new_center = False
-            if (month + 1) % 2 == 0:
+            if month % 2 == 0:
                 open_new_center = True
-            self.month_simulation(open_new_center)
+            self.month_simulation(open_new_center, False)
 
     def export_to_csv(self, file_name="simulation_record", extension="csv"):
         if extension == "csv":
-            file_name = re.sub("[^a-zA-Z0-9 /:_]", "", file_name)   # can we not use re?
+            file_name = re.sub("[^a-zA-Z0-9 /:_]", "", file_name)  # can we not use re?
             with open(f"{file_name}.{extension}", "w", newline="") as file:
 
                 writer = csv.writer(file)
@@ -136,7 +146,7 @@ class Simulator:
                 for month in self.history:
                     data = []
                     for main_result in month.values():
-                        aggregate = 0   # for calculating total
+                        aggregate = 0  # for calculating total
                         for specific_result in main_result.values():
                             data.append(specific_result)
                             aggregate += specific_result
@@ -153,5 +163,3 @@ if __name__ == "__main__":
     pprint(simulator.history)
 
     simulator.export_to_csv()
-
-

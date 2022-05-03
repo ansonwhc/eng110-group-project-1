@@ -7,11 +7,11 @@ class Center():
         self.all_centers = []
         self.distribute_trainees_list = []
         self.waiting_list_dictionary = {
-            "Java": 53,
-            "C#": 123,
-            "Data": 161,
-            "DevOps": 125,
-            "Business": 166
+            "Java": 0,
+            "C#": 0,
+            "Data": 0,
+            "DevOps": 0,
+            "Business": 0
         }
         self.max_capacity = {
             "training_hub": 100,
@@ -57,19 +57,20 @@ class Center():
         # Bootcamp
         elif random_num == 2:
             self.num_bootcamps += 1
-            self.all_centers.append({"open": "yes", "full": "no", "months_below_25": 0, "type": "bootcamp", "trainee": 
-                                                                                    {"Java": 0,
-                                                                                    "C#": 0,
-                                                                                    "Data": 0,
-                                                                                    "DevOps": 0,
-                                                                                    "Business": 0
-                                                                                    }})
+            self.all_centers.append({"open": "yes", "full": "no", "months_below_25": 0, "type": "bootcamp", "trainee":
+                {"Java": 0,
+                 "C#": 0,
+                 "Data": 0,
+                 "DevOps": 0,
+                 "Business": 0
+                 }})
         # Tech center
         elif random_num == 3:
             # Determines what course the tech center will be teaching
             course = random.choice(["Java", "C#", "Data", "DevOps", "Business"])
             # Creates a new id for the tech center 
-            self.all_centers.append({"open": "yes", "full": "no", "type": "tech_center", "course": course, "trainee": {course: 0}})
+            self.all_centers.append(
+                {"open": "yes", "full": "no", "type": "tech_center", "course": course, "trainee": {course: 0}})
 
     def push_to_waiting_list(self, trainee):
         for trainee_key in trainee.keys():
@@ -98,7 +99,7 @@ class Center():
 
     def distribute(self):
         # Sample the number of trainees each center want to take in
-        self.create_distribution_list()   # -> self.distribute_trainees_list
+
         # Iterating through all_centers
         for index, center in enumerate(self.all_centers):
             # access the number of trainees the current center want to take in
@@ -132,19 +133,20 @@ class Center():
             accepting = min([can_take_in, want_to_accepting, res])  # does it go over the max (max: )
             center['trainee'][center_course] += accepting
             self.waiting_list_dictionary[center_course] -= accepting
+            self.distribute_trainees_list[index] -= accepting
 
     def distribute_training_hub(self, index: int, random_trainee: int):
         # TODO: add comments
         center = self.all_centers[index]
 
-        if sum(center['trainee'].values()) < self.max_capacity['training_hub']:     # if not full
-            res = sum(self.waiting_list_dictionary.values())   # how many on the waiting list
+        if sum(center['trainee'].values()) < self.max_capacity['training_hub']:  # if not full
+            res = sum(self.waiting_list_dictionary.values())  # how many on the waiting list
 
             want_to_accepting = random_trainee
 
             can_take_in = self.max_capacity['training_hub'] - sum(center['trainee'].values())
 
-            accepting = min([can_take_in, want_to_accepting])   # does it go over the max (max: )
+            accepting = min([can_take_in, want_to_accepting])  # does it go over the max (max: )
 
             for trainee in range(accepting):
                 choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
@@ -157,7 +159,6 @@ class Center():
 
                 self.waiting_list_dictionary[sampled_course] -= 1
 
-
     def distribute_bootcamp(self, index: int, random_trainee: int):
         # TODO: add comments
         center = self.all_centers[index]
@@ -166,7 +167,7 @@ class Center():
             want_to_accepting = random_trainee
             can_take_in = self.max_capacity['bootcamp'] - sum(center['trainee'].values())
 
-            accepting = min([can_take_in, want_to_accepting])   # does it go over the max (max: )
+            accepting = min([can_take_in, want_to_accepting])  # does it go over the max (max: )
             for trainee in range(accepting):
                 choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
                 if choose_from == []:
@@ -185,19 +186,19 @@ if __name__ == "__main__":
         "Business": 9
     }
 
-    obj = Center()
-    for _ in range(30):
-        obj.generate_center()
-        obj.distribute()
-        print(obj.distribute_trainees_list)
-        print("waiting list:", obj.waiting_list_dictionary)
-
-    obj.close_center()
-    print("")
-    print("all centers:", obj.all_centers)
-    # print(obj.distribute_training_hub())
-    # center_dict = obj.all_centers[0]
-    # wait_dict = obj.waiting_list_dictionary
+    # obj = Center()
+    # for _ in range(30):
+    #     obj.generate_center()
+    #     obj.distribute()
+    #     print(obj.distribute_trainees_list)
+    #     print("waiting list:", obj.waiting_list_dictionary)
     #
-    # print("centre list:", center_dict['trainee'])
-    # print("waiting list:", wait_dict)
+    # obj.close_center()
+    # print("")
+    # print("all centers:", obj.all_centers)
+    # # print(obj.distribute_training_hub())
+    # # center_dict = obj.all_centers[0]
+    # # wait_dict = obj.waiting_list_dictionary
+    # #
+    # # print("centre list:", center_dict['trainee'])
+    # # print("waiting list:", wait_dict)
