@@ -39,16 +39,35 @@ class Center():
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
-            self.all_centers.append({"open": "yes", "type": "training_hubs", "trainee": {}})
+            self.all_centers.append({"open": "yes", "type": "training_hubs", "full": "no", "trainee": {}})
         # Bootcamp
         elif random_num == 2:
-            self.all_centers.append({"open": "yes", "type": "bootcamp", "trainee": {}})
+            self.all_centers.append({"open": "yes", "type": "bootcamp", "full": "no", "months_below_25": 0, "trainee": {}})
         # Tech center
         elif random_num == 3:
             # Determines what course the tech center will be teaching
             course = random.choice(["Java", "C#", "Data", "DevOps", "Business"])
             # Creates a new id for the tech center 
-            self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "trainee": {}})
+            self.all_centers.append({"open": "yes", "type": "tech_center", "course": course, "full": "no", "trainee": {}})
+
+    def close_center(self):
+        for centers in self.all_centers:
+            if centers["type"] == "training_hubs" and sum(centers["trainee"].values()) == 100:
+                centers["full"] = "yes"
+            elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) == 500:
+                centers["full"] = "yes"
+            elif centers["type"] == "tech_center" and sum(centers["trainee"].values()) == 200:
+                centers["full"] = "yes"
+            if centers["type"] == "training_hubs" and sum(centers["trainee"].values()) < 25:
+                centers["open"] = "no"
+            elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) < 25:
+                centers["months_below_25"] += 1
+                if centers["months_below_25"] == 4:
+                    centers["open"] = "no"
+            elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) >= 25:
+                centers["months_below_25"] = 0
+            elif centers["type"] == "tech_center" and sum(centers["trainee"].values()) < 25:
+                centers["open"] = "no"
 
     def push_to_waiting_list(self, trainee):
         for trainee_key in trainee.keys():
