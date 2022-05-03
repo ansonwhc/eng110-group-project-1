@@ -7,11 +7,11 @@ class Center():
         self.all_centers = []
         self.distribute_trainees_list = []
         self.waiting_list_dictionary = {
-            "Java": 199,
-            "C#": 243,
-            "Data": 302,
-            "DevOps": 48,
-            "Business": 59
+            "Java": 5,
+            "C#": 13,
+            "Data": 16,
+            "DevOps": 12,
+            "Business": 11
         }
         self.max_capacity = {
             "training_hub": 100,
@@ -42,7 +42,7 @@ class Center():
 
     def generate_center(self):
         # random_num = self.centers_available()
-        random_num = self.centers_available()
+        random_num = 3
         # (TODO: Type dictionary {int: type_center})
         # Training hub
         if random_num == 1:
@@ -125,7 +125,7 @@ class Center():
             res = self.waiting_list_dictionary[center_course]
             want_to_accepting = random_trainee
             can_take_in = self.max_capacity['tech_center'] - sum(center['trainee'].values())
-            accepting = min([can_take_in, want_to_accepting])  # does it go over the max (max: )
+            accepting = min([can_take_in, want_to_accepting, res])  # does it go over the max (max: )
             center['trainee'][center_course] += accepting
             self.waiting_list_dictionary[center_course] -= accepting
 
@@ -150,6 +150,8 @@ class Center():
             for trainee in range(accepting):
                 choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
                 print("choose", choose_from)
+                if choose_from == []:
+                    break
 
                 sampled_course = random.choice(choose_from)
                 print("sampled", sampled_course)
@@ -173,6 +175,8 @@ class Center():
             print("training_hub accepting", accepting)   # good
             for trainee in range(accepting):
                 choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
+                if choose_from == []:
+                    break
                 sampled_course = random.choice(choose_from)
                 center['trainee'][sampled_course] += 1
                 self.waiting_list_dictionary[sampled_course] -= 1
@@ -188,15 +192,15 @@ if __name__ == "__main__":
     }
 
     obj = Center()
-    # for _ in range(5):
-    obj.generate_center()
+    for _ in range(3):
+        obj.generate_center()
 
-    print("waiting list:", obj.waiting_list_dictionary)
-    print("all centers:", obj.all_centers)
-    obj.distribute()
-    print(obj.distribute_trainees_list)
-    print("waiting list:", obj.waiting_list_dictionary)
-    print("all centers:", obj.all_centers)
+        print("waiting list:", obj.waiting_list_dictionary)
+        print("all centers:", obj.all_centers)
+        obj.distribute()
+        print(obj.distribute_trainees_list)
+        print("waiting list:", obj.waiting_list_dictionary)
+        print("all centers:", obj.all_centers)
 
     obj.close_center()
 
