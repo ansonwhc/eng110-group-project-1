@@ -93,16 +93,15 @@ class Simulator:
     def month_simulation(self, open_new_center: bool):
         if open_new_center:
             self.center_class.generate_center()
-        #each_center_take_in = self.center_class.distribution_sampling_center_in_take()
         self.center_class.distribute()
-        #self.center_class.assess_availability(each_center_take_in)
+        self.center_class.close_center()
         # to be reviewed after center_class
+
         # all computations from center_class
         num_open_centers = self.calculate_open_centers()
         num_full_centers = self.calculate_full_centers()
         num_of_trainees = self.calculate_num_of_trainees()
         num_of_waiting_list = self.calculate_num_of_waiting_list()
-        # print(num_of_waiting_list)
         num_closed_centers = self.calculate_closed_centers()
         current_month_output = {"number of open centers": num_open_centers,
                                 "number of closed centers": num_closed_centers,
@@ -149,46 +148,10 @@ class Simulator:
 
 
 if __name__ == "__main__":
-    all_centers = [
-        {
-            "open": "yes",
-            "type": "tech_center",
-            "trainee": {"Java": 200}
-        },
-        {
-            "open": "yes",
-            "type": "bootcamp",
-            "trainee": {"Java": 250, "C#": 4}
-        },
-        {
-            "open": "yes",
-            "type": "training_hub",
-            "trainee": {"Java": 50, "C#": 50}
-        },
-        {
-            "open": "no",
-            "type": "training_hub",
-            "trainee": {"Java": 50, "C#": 50}
-        }
-        ]
-
-    # simulator = Simulator()
-    # open_centers = simulator.calculate_open_centers(all_centers)
-    # print("open", open_centers)
-    # closed_centers = simulator.calculate_closed_centers(all_centers)
-    # print("closed", closed_centers)
-    # full_centers = simulator.calculate_full_centers(all_centers)
-    # print("full", full_centers)
-    # num_trainees = simulator.calculate_num_of_trainees(all_centers)
-    # print("trainee", num_trainees)
-    # simulator.month_simulation(False)
-    # print("no gen month output")
-    # pprint(simulator.current_month_output)
-    # simulator.month_simulation(True)
-    # print("gen month output")
-    # pprint(simulator.current_month_output)
     simulator = Simulator()
     simulator.duration_simulation(5)
     pprint(simulator.history)
 
     simulator.export_to_csv()
+
+
