@@ -2,7 +2,7 @@
 
 ## Download Instructions
 
-> 1. In the main branch of the [GitHub repository](https://link-url-here.org), click on the folder titled "dist" as shown below:
+> 1. In the main branch of the [GitHub repository](https://github.com/ansonwhc/eng110-group-project-1), click on the folder titled "dist" as shown below:
 
 ![](https://i.imgur.com/a3rutEW.png)
 
