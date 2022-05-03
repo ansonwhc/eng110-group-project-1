@@ -124,28 +124,9 @@ class Center():
                         center['trainee'][course] += accepting
                         self.waiting_list_dictionary[course] -= accepting
 
-
-    def available_num_lg_0(self):
-
-        pass
-
-    def available_num_eq_0(self):
-        pass
-
-    def available_num_ls_0(self):
-        pass
-
             # If the trainee_num is more than the space available in the center, the center will simply not accept it
-
-
-        # If all centers are full return the trainees to the waiting_list
-
-
-
-
-        # randomly generated trainees need to be allocated to the course types of the waiting_list
-
-
+            # If all centers are full return the trainees to the waiting_list
+            # randomly generated trainees need to be allocated to the course types of the waiting_list
 
 
 
@@ -174,7 +155,7 @@ if __name__ == "__main__":
     obj.generate_center()
     obj.all_centers[0]['type'] == 'tech_center'
     # print(obj.waiting_list_dictionary)
-    print(obj.distribute_tech_centers())
+    print(obj.distribute_training_hub())
     center_dict = obj.all_centers[0]
     wait_dict = obj.waiting_list_dictionary
 
