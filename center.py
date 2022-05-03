@@ -87,26 +87,26 @@ class Center():
             center_type = center['type']
             condition_1 = (center['open'] == 'yes')
             num_trainee_in_center = sum(center['trainee'].values())
-            condition_2 = (num_trainee_in_center < max_capacity[center_type])
+            condition_2 = (num_trainee_in_center < self.max_capacity[center_type])
             if condition_1 and condition_2:
                 each_center_take_in.append(random.randint(0, 50))
             else:
                 each_center_take_in.append(0)
 
-    def assess_availability(self):
-        # Assessing whether our center can take the sample number of trainees
-        for center, num_take_in in zip(self.all_centers, each_center_take_in):
-            center_type = center['type']
-            available_num = max_capacity[center_type] - sum(center["trainee"].values()) - num_take_in
-            if available_num > 0:
-                # Center is still available
-                self.available_num_lg_0()
-            elif available_num == 0:
-                # If they're equal the center is full
-                self.available_num_eq_0()
-            else:
-                # For when sampled number of trainees exceeded the center capacity
-                self.available_num_ls_0()
+    # def assess_availability(self):
+    #     # Assessing whether our center can take the sample number of trainees
+    #     for center, num_take_in in zip(self.all_centers, each_center_take_in):
+    #         center_type = center['type']
+    #         available_num = max_capacity[center_type] - sum(center["trainee"].values()) - num_take_in
+    #         if available_num > 0:
+    #             # Center is still available
+    #             self.available_num_lg_0()
+    #         elif available_num == 0:
+    #             # If they're equal the center is full
+    #             self.available_num_eq_0()
+    #         else:
+    #             # For when sampled number of trainees exceeded the center capacity
+    #             self.available_num_ls_0()
 
     def create_distribution_list(self):
         self.distribute_trainees_list = []
@@ -145,7 +145,20 @@ class Center():
                 res = sum(self.waiting_list_dictionary.values())
                 accepting = min([min([res, (self.max_capacity['training_hub'] - res)]), random_trainee])
                 for trainee in range(accepting):
-                    choose_from = [k for k, v in self.waiting_list_dictionary.items() if v > 0]
+                    choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
+                    sampled_course = random.choice(choose_from)
+                    center['trainee'][sampled_course] += 1
+                    self.waiting_list_dictionary[sampled_course] -= 1
+
+    def distribute_bootcamp(self):
+        self.create_distribution_list()
+        for index, center in enumerate(self.all_centers):
+            random_trainee = self.distribute_trainees_list[index]
+            if sum(center['trainee'].values()) < self.max_capacity['bootcamp']:
+                res = sum(self.waiting_list_dictionary.values())
+                accepting = min([min([res, (self.max_capacity['bootcamp'] - res)]), random_trainee])
+                for trainee in range(accepting):
+                    choose_from = [key for key, value in self.waiting_list_dictionary.items() if value > 0]
                     sampled_course = random.choice(choose_from)
                     center['trainee'][sampled_course] += 1
                     self.waiting_list_dictionary[sampled_course] -= 1
