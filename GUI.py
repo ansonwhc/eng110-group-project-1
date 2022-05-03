@@ -40,23 +40,25 @@ class SimulationInterface:
         self.export_button.grid(row=7, column=0, sticky=NW, columnspan=2)
 
     def display_next_month_output(self):
-        self.display_export_button()
+        # self.display_export_button()
         self.monthly_result = self.simulator.current_month_output
         # prettify
         pretty_text = self.prettify_monthly_output(self.monthly_result, True)
-        self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
+        self.result_var.set(f"======= Current month: {self.current_month + 1} =======\n{pretty_text}")
 
     def display_final_month_output(self):
-        self.display_export_button()
-        self.monthly_result = self.simulator.history[-1]
-        # prettify
-        pretty_text = self.prettify_monthly_output(self.monthly_result, True)
-        self.result_var.set(f"Current month: {int(self.full_duration)}\n{pretty_text}")
+        # self.display_export_button()
+        if not self.simulate_next_month:
+            self.monthly_result = self.simulator.history[-1]
+            # prettify
+            pretty_text = self.prettify_monthly_output(self.monthly_result, True)
+            self.current_month = int(self.full_duration)
+            self.result_var.set(f"======= Current month: {int(self.full_duration)} =======\n{pretty_text}")
 
     def prettify_monthly_output(self, result_dict, top=False):
         if not isinstance(result_dict, dict):
             return result_dict
-        top_level = '{}\n{}'
+        top_level = '\n~~~~~ {} ~~~~~\n{}'
         sub_level = '{}: {}'
         if top:
             level = top_level
@@ -68,33 +70,33 @@ class SimulationInterface:
 
     def display_all_output(self):
         if self.simulator.history:
-            self.display_export_button()
+            # self.display_export_button()
             self.num_months = len(self.simulator.history)
             self.current_month = 0
             self.forward_a_month = (self.current_month + 1 == self.num_months)
             self.backward_a_month = (self.current_month == 0)
 
             pretty_text = self.prettify_monthly_output(self.simulator.history[self.current_month], True)
-            self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
+            self.result_var.set(f"======= Current month: {self.current_month + 1} =======\n{pretty_text}")
         else:
             self.result_var.set("Input is not recognised, please input an integer")
             self.duration_var.set("")
 
     def display_forward_a_month(self):
         # TODO: doesn't work when simulating the next month
-        if not self.simulate_next_month:
+        if not self.simulate_next_month:  # things break when implemented - prob poor implementation
             if self.current_month + 1 < self.num_months:
                 self.current_month += 1
                 pretty_text = self.prettify_monthly_output(self.simulator.history[self.current_month], True)
-                self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
+                self.result_var.set(f"======= Current month: {self.current_month + 1} =======\n{pretty_text}")
 
     def display_backward_a_month(self):
         # TODO: doesn't work when simulating the next month
-        if not self.simulate_next_month:
+        if not self.simulate_next_month:  # things break when implemented - prob poor implementation
             if self.current_month > 0:
                 self.current_month -= 1
                 pretty_text = self.prettify_monthly_output(self.simulator.history[self.current_month], True)
-                self.result_var.set(f"Current month: {self.current_month + 1}\n{pretty_text}")
+                self.result_var.set(f"======= Current month: {self.current_month + 1} =======\n{pretty_text}")
 
     def run_sim(self):
         if not self.simulate_next_month:
@@ -103,13 +105,13 @@ class SimulationInterface:
         self.result_box = Label(self.root, textvariable=self.result_var, anchor="e", justify=LEFT)
         self.result_box.grid(row=0, column=3, sticky=NW, rowspan=10)
 
-        # get user input
         if self.simulate_next_month:
             open_new_center = (int(self.current_month) % 2 == 0)
             self.simulator.month_simulation(open_new_center)
             self.display_next_month_output()
             self.current_month += 1
 
+        # get user input
         else:
             self.full_duration = self.duration_var.get()
             self.duration_var.set("")
@@ -124,7 +126,8 @@ class SimulationInterface:
         if self.simulate_next_month:
             self.run_simulation_button_text_var.set("Simulate Next Month")
             self.duration_var.set("Input here will not will valid")
-            self.result_var.set("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            # temp fix for standard formatting
+            self.result_var.set("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ")
         else:
             self.run_simulation_button_text_var.set("Run Simulation")
             self.duration_var.set("")
@@ -133,9 +136,6 @@ class SimulationInterface:
         self.current_month = 0
 
     def create_window(self):
-        # TODO: think there should be a better way than using the method place(),
-        #  maybe pack() or grid()? \
-        #  Because right now it is using relative position rather than absolute
 
         # create an instance of the Tk class
         self.root = Tk()
@@ -147,11 +147,17 @@ class SimulationInterface:
         self.simulate_next_month = False  # whether to simulate full duration or just next month
         self.duration_var = StringVar()
         self.result_var = StringVar()
-        self.result_var.set("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         self.info_var = StringVar()
         self.sim_next_month_box = IntVar()
         self.run_simulation_button_text_var = StringVar()
         self.run_simulation_button_text_var.set("Run Simulation")
+
+        # temp fix for standard formatting
+        self.result_var.set("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ")
+        self.result_box = Label(self.root, textvariable=self.result_var, anchor="e", justify=LEFT)
+        self.result_box.grid(row=0, column=3, sticky=NW, rowspan=10)
+
+        self.display_export_button()
 
         # checking and un-checking still activates the function
         self.sim_next_month_checkbox = Checkbutton(self.root, text="Simulate next month",
@@ -175,7 +181,6 @@ class SimulationInterface:
         self.final_month_button = Button(text="Redirect to the final month result",
                                          command=self.display_final_month_output)
         self.final_month_button.grid(row=5, column=0, sticky=NW)
-
 
         # button for when user is ready to run the sim
         self.run_simulation_button = Button(self.root,
