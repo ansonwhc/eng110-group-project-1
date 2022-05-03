@@ -1,7 +1,8 @@
 # PyCharm
 .idea/
 
-# python
+# Python
 __pycache__
 
-#
+# PyTest
+.pytest_cache/

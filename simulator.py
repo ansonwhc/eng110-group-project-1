@@ -113,13 +113,15 @@ class Simulator:
                                 "number of full centers": num_full_centers,
                                 "number of trainees": num_of_trainees,
                                 "number of trainees on waiting list": num_of_waiting_list}
-        self.history.append(current_month_output)
         self.current_month_output = current_month_output
 
         if not second_dist:
             new_trainees = self.trainee_class.generate_new_trainees()
             self.center_class.push_to_waiting_list(new_trainees)
             self.month_simulation(False, True)
+
+        elif second_dist:
+            self.history.append(self.current_month_output)
 
     def duration_simulation(self, duration):
         duration = self.input_type_check(duration)
@@ -130,6 +132,7 @@ class Simulator:
             if month % 2 == 0:
                 open_new_center = True
             self.month_simulation(open_new_center, False)
+
 
     def export_to_csv(self, file_name="simulation_record", extension="csv"):
         if extension == "csv":
@@ -159,7 +162,10 @@ class Simulator:
 
 if __name__ == "__main__":
     simulator = Simulator()
-    simulator.duration_simulation(5)
+    simulator.duration_simulation(30)
     pprint(simulator.history)
+    print(len(simulator.history))
+
+    # pprint(simulator.history)
 
     simulator.export_to_csv()

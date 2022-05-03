@@ -77,16 +77,17 @@ class Center():
             self.waiting_list_dictionary[trainee_key] += trainee[trainee_key]
 
     def close_center(self):
-        for centers in self.all_centers:
+        for index, centers in enumerate(self.all_centers):
             if centers["type"] == "training_hubs" and sum(centers["trainee"].values()) == 100:
                 centers["full"] = "yes"
             elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) == 500:
                 centers["full"] = "yes"
             elif centers["type"] == "tech_center" and sum(centers["trainee"].values()) == 200:
                 centers["full"] = "yes"
-
             if centers["type"] == "training_hubs" and sum(centers["trainee"].values()) < 25:
                 centers["open"] = "no"
+                self.give_back_trainees(index)
+
                 self.num_open_training_hubs -= 1
             elif centers["type"] == "bootcamp" and sum(centers["trainee"].values()) < 25:
                 centers["months_below_25"] += 1
@@ -96,6 +97,11 @@ class Center():
                 centers["months_below_25"] = 0
             elif centers["type"] == "tech_center" and sum(centers["trainee"].values()) < 25:
                 centers["open"] = "no"
+
+    def give_back_trainees(self, index):
+        for key, value in self.all_centers[index]['trainee'].items():
+            self.waiting_list_dictionary[key] += value
+            self.all_centers[index]['trainee'][key] = 0
 
     def distribute(self):
         # Sample the number of trainees each center want to take in

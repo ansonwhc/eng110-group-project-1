@@ -1,0 +1,10 @@
+number of open centers -- training_hub,number of open centers -- bootcamp,number of open centers -- tech_center,number of open centers -- total,number of closed centers -- training_hub,number of closed centers -- bootcamp,number of closed centers -- tech_center,number of closed centers -- total,number of full centers -- training_hub,number of full centers -- bootcamp,number of full centers -- tech_center,number of full centers -- total,number of trainees -- Java,number of trainees -- C#,number of trainees -- Data,number of trainees -- DevOps,number of trainees -- Business,number of trainees -- total,number of trainees on waiting list -- Java,number of trainees on waiting list -- C#,number of trainees on waiting list -- Data,number of trainees on waiting list -- DevOps,number of trainees on waiting list -- Business,number of trainees on waiting list -- total
+0,1,0,1,0,0,0,0,0,0,0,0,6,5,8,5,17,41,0,0,4,5,0,9
+0,1,0,1,0,0,0,0,0,0,0,0,6,5,10,7,19,47,9,16,11,9,10,55
+0,2,0,2,0,0,0,0,0,0,0,0,23,31,31,27,44,156,0,0,0,0,0,0
+0,2,0,2,0,0,0,0,0,0,0,0,35,37,42,40,59,213,10,9,6,3,1,29
+0,2,0,2,0,0,1,1,0,0,0,0,51,58,54,54,74,291,11,3,9,1,5,29
+0,2,0,2,0,0,1,1,0,0,0,0,75,70,71,65,95,376,0,1,3,1,2,7
+1,2,0,3,0,0,1,1,0,0,0,0,89,86,88,77,111,451,0,2,12,6,2,22
+1,2,0,3,0,0,1,1,0,0,0,0,103,102,112,94,127,538,0,0,0,0,0,0
+2,2,0,4,0,0,1,1,0,0,0,0,119,125,122,101,141,608,0,0,0,0,0,0

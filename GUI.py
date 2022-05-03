@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter import ttk
 from simulator import Simulator
 
 
@@ -9,7 +8,6 @@ class SimulationInterface:
         """
         TK interface for running simulations
         """
-
         self.window_size = window_size
         self.simulator = Simulator()
         self.create_window()
@@ -100,7 +98,7 @@ class SimulationInterface:
 
         # get user input
         if self.simulate_next_month:
-            open_new_center = ((int(self.current_month) + 1) % 2 == 0)
+            open_new_center = (int(self.current_month) % 2 == 0)
             self.simulator.month_simulation(open_new_center)
             self.display_next_month_output()
             self.current_month += 1
@@ -110,7 +108,6 @@ class SimulationInterface:
             self.duration_var.set("")
             self.simulator.duration_simulation(duration)
             self.display_all_output()
-
 
     def set_simulate_month(self):
         # set self.simulate_next_month to its opposite boolean (for the checkbox)
